@@ -11,7 +11,7 @@ Package Cuisinier is
 	--Function chiffre_affaire (Tableau_Cuisinier:T_club; prestation: T_prestation; cook_nom, cook_prenom: nomination) return integer;
 	--Procedure depart (Tableau_Cuisinier: IN OUT T_club; cook_nom, cook_prenom: IN nomination; D:IN OUT T_demande);
 	Procedure affichage_club(Tableau_Cuisinier:IN T_club);
-	
+	Procedure Menu(option:out character);
 end cuisinier;
 
 
