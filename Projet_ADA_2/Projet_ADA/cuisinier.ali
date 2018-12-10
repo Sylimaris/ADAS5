@@ -1,0 +1,100 @@
+V "GNAT Lib v7"
+P ZX
+
+RN
+RV NO_DIRECT_BOOLEAN_OPERATORS
+RV NO_ENUMERATION_MAPS
+RV NO_FLOATING_POINT
+RV NO_IO
+RV SPARK_05
+
+U cuisinier%b		cuisinier.adb		d239c714 NE OO PK IL KM
+W ada%s			ada.ads			ada.ali
+W ada.float_text_io%s	a-flteio.ads		a-flteio.ali
+W ada.integer_text_io%s	a-inteio.ads		a-inteio.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W system%s		system.ads		system.ali
+W system.val_enum%s	s-valenu.adb		s-valenu.ali
+W types%s		types.ads		types.ali
+
+U cuisinier%s		cuisinier.ads		11e61c2a EE NE OO PK KM
+W types%s		types.ads		types.ali
+
+D ada.ads		20170106103348 76789da1 ada%s
+D a-except.ads		20151016123252 291912d5 ada.exceptions%s
+D a-flteio.ads		20070406091342 e18a47a0 ada.float_text_io%s
+D a-inteio.ads		20070406091342 f64b89a4 ada.integer_text_io%s
+D a-ioexce.ads		20140225151544 e4a01f64 ada.io_exceptions%s
+D a-stream.ads		20141120112812 119b8fb3 ada.streams%s
+D a-tags.ads		20151016130316 01f5e3ef ada.tags%s
+D a-textio.ads		20140717063745 386df5d4 ada.text_io%s
+D a-tiflio.ads		20140717063513 56fbda09 ada.text_io.float_io%s
+D a-tiinio.ads		20140717063513 aa04e5d6 ada.text_io.integer_io%s
+D a-unccon.ads		20170106103348 31484697 ada.unchecked_conversion%s
+D cuisinier.ads		20181210213425 5dd69e58 cuisinier%s
+D cuisinier.adb		20181210214151 ec73e0ee cuisinier%b
+D interfac.ads		20160502101001 5ab55268 interfaces%s
+D i-cstrea.ads		20140801100435 e53d8b8e interfaces.c_streams%s
+D system.ads		20170510173650 4635ec04 system%s
+D s-crtl.ads		20141120112812 0ebbdb71 system.crtl%s
+D s-exctab.ads		20140225151139 54135002 system.exception_table%s
+D s-ficobl.ads		20140718105747 078245e4 system.file_control_block%s
+D s-parame.ads		20140801093848 7e2a0d7f system.parameters%s
+D s-soflin.ads		20151020124036 14e1eb6c system.soft_links%s
+D s-stache.ads		20140225151139 a37c21ec system.stack_checking%s
+D s-stalib.ads		20151112104907 09bd3940 system.standard_library%s
+D s-stoele.ads		20140225151139 2dc34a04 system.storage_elements%s
+D s-traent.ads		20140730135025 005bf670 system.traceback_entries%s
+D s-unstyp.ads		20160502101423 34867c83 system.unsigned_types%s
+D s-valenu.ads		20090409150019 bb1a4295 system.val_enum%s
+D s-wchcon.ads		20140718092328 1b7d22d2 system.wch_con%s
+D types.ads		20181210213510 4c308272 types%s
+X 1 ada.ads
+16K9*Ada 20e8 13|1r6 1r19 1r39 2r5 2r18 2r38
+X 3 a-flteio.ads
+20K13*Float_Text_IO[9|46] 13|1w43 2r42
+X 4 a-inteio.ads
+18K13*Integer_Text_IO[10|46] 13|1w23 2r22
+X 8 a-textio.ads
+49K13*Text_IO 471e16 13|1w10 2r9
+166U14*New_Line 13|13s17 16s17
+242U14*Put 13|11s17 14s17 26s9
+249U14*Get_Line 13|12s17 15s17 27s17
+263U14*Put_Line 13|42s33 62s25
+X 12 cuisinier.ads
+4K9*Cuisinier 14l5 14e14 13|4b14 68l5 68t14
+7U19*saisie_cook 7<32 7<45 7<71 13|8b19 18l13 18t24 39s17
+7a32 cook_prenom{29|8A17} 13|8b32 12m26
+7a45 cook_nom{29|8A17} 13|8b44 15m26
+7e71 cook_specialite{29|11E14} 13|8b70 17m35
+8U19*saisie_specialite 8<37 13|17s17 22b19 30l13 30t30
+8e37 cook_specialite{29|11E14} 13|22b38 28m17
+10U19*recrutement 10=31 13|34b19 64l21 64t32
+10a31 Tableau_Cuisinier{29|26A14} 13|34b32 41r37 41r78 47r34 48r36 49m41
+. 50m41 51m41 52m41 53m41 54m41 55m41 56m41 57m41 58m41
+X 13 cuisinier.adb
+9i9 k{integer} 12m38 15m35
+23a9 s{string} 27m26 28r53
+23i25 k{integer} 27m28 28r58
+35b17 existe{boolean} 43m33 46r20
+36a17 cook_nom{29|8A17} 39m41 41r28 49r67
+36a26 cook_prenom{29|8A17} 39m29 41r66 50r70
+37e17 cook_specialite{29|11E14} 39m50 51r74
+40i21 i{integer} 41r55 41r96
+47i29 i{integer} 48r54 49r59 50r59 51r59 52r59 53r59 54r59 55r59 56r59 57r59
+. 58r59
+X 29 types.ads
+1K9*types 12|1w6 2r5 13|1w57 2r56 29|43e10
+8A17*nomination{string}<integer> 12|7r59 13|8r58 36r39
+11E14*T_specialite 12|7r92 8r58 13|8r91 22r60 28r34 37r34 29|11e133
+15a17*nom{8A17} 13|41r58 49m62
+16a17*prenom{8A17} 13|41r99 50m62
+17e17*specialite{11E14} 13|51m62
+18i17*forfait_cuisinier{integer} 13|52m62
+19b17*existe{boolean} 13|48r57 54m62
+20f17*somme_note_semaine{float} 13|55m62
+21i17*nb_repas_semaine{integer} 13|56m62
+22i17*nb_repas{integer} 13|57m62
+23i17*chiffre_affaire{integer} 13|53m62 58m62
+26A14*T_club(14R14)<integer> 12|10r57 13|34r58 40r26
+
