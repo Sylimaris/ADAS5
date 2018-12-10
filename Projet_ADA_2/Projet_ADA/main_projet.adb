@@ -30,7 +30,7 @@ begin
 			when '1' =>recrutement(Tableau_Cuisinier);
 
 			when '2' =>affichage_club(Tableau_cuisinier);
-	
+			
 			when '3' =>exit;
 	
 			when '4' =>exit;

@@ -55,7 +55,6 @@ Package body cuisinier is
 				    	Tableau_Cuisinier(i).somme_note_semaine:=0.0;
 					Tableau_Cuisinier(i).nb_repas_semaine:=0;
 					Tableau_Cuisinier(i).nb_repas:=0;
-		       			Tableau_Cuisinier(i).chiffre_affaire:=0;   
 				    	exit;
 		        	end if;
 		    	end loop;
@@ -64,5 +63,24 @@ Package body cuisinier is
 		end recrutement;
 
 --------------------------------------------------------
+
+
+	Procedure affichage_club(Tableau_Cuisinier:IN T_club) is
+	Begin
+		for i in T_club'range loop
+			put(Tableau_Cuisinier(i).nom);
+			put(Tableau_Cuisinier(i).prenom);
+		--	put(Tableau_Cuisinier(i).specialite);
+			put(Tableau_Cuisinier(i).forfait_cuisinier);
+			put(Tableau_Cuisinier(i).chiffre_affaire);
+		--	put(Tableau_Cuisinier(i).existe);
+			put(Tableau_Cuisinier(i).somme_note_semaine);			
+			put(Tableau_Cuisinier(i).nb_repas_semaine);
+			put(Tableau_Cuisinier(i).nb_repas);
+			new_line;
+		end loop;
+	end affichage_club;		
+
+
 
 end cuisinier;
