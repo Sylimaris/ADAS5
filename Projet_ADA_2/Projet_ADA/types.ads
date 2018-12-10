@@ -12,8 +12,8 @@ package types is
 
 
 	Type T_Cuisinier is record
-		nom: nomination := ('*',others =>' ');
-		prenom: nomination := ('*',others =>' ');
+		nom: nomination;
+		prenom: nomination;
 		specialite : T_specialite;
 		forfait_cuisinier:integer:=30;
 		existe:boolean:= false; 		--test pour savoir si le cuisinier existe
