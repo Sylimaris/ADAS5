@@ -4,7 +4,7 @@ use types;
 
 Package client is
 
-	Procedure saisie_prestation (prenom_client, nom_client: OUT nomination;	cook_specialite: OUT T_specialite; cook_prenom, cook_nom : OUT nomination; nb_convives: OUT positive; jour: OUT T_semaine);
+	Procedure saisie_prestation (Planning: IN OUT T_planning,Tableau_cuisinier: IN T_club);
 
 	Procedure nouvelle_prestation (D: IN OUT T_demande; prestation: IN T_prestation);
 
