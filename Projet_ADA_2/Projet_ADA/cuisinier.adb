@@ -54,7 +54,7 @@ Package body cuisinier is
 				    Tableau_Cuisinier(i).chiffre_affaire:=0;
 				    Tableau_Cuisinier(i).existe:=true;
 					Tableau_Cuisinier(i).somme_note_semaine:=0.0;
-					Tableau_Cuisinier(i).nb_repas_semaine:=0;
+					Tableau_Cuisinier(i).nb_prestations_semaine:=0;
 					Tableau_Cuisinier(i).nb_repas:=0;
 					ecrit:=true;
 					exit;
@@ -81,7 +81,7 @@ Package body cuisinier is
 				put("Forfait actuel: ");put(Tableau_Cuisinier(i).forfait_cuisinier, width=>0);new_line;
 				put("Chiffre affaire total: ");put(Tableau_Cuisinier(i).chiffre_affaire, width=>0);new_line;
 				put("Somme note de la semaine:");put(Tableau_Cuisinier(i).somme_note_semaine,aft=>0,exp=>0);new_line;		
-				put("Nb repas cette semaine: ");put(Tableau_Cuisinier(i).nb_repas_semaine, width=>0);new_line;
+				put("Nb prestations cette semaine: ");put(Tableau_Cuisinier(i).nb_prestations_semaine, width=>0);new_line;
 				put("Nb repas au total: ");put(Tableau_Cuisinier(i).nb_repas, width=>0);new_line;
 				new_line;
 			end if;
@@ -90,16 +90,15 @@ Package body cuisinier is
 	
 --------------------------------------------------------
 	
-	
 	Procedure affichage_chiffre_affaire (Tableau_Cuisinier: IN T_club; cook_nom, cook_prenom: IN nomination) is
 		Begin
 			for i in Tableau_Cuisinier'range loop
 				if Tableau_Cuisinier(i).existe=true then
 					if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
-						put("Le chiffre d'affaire de");
-						put(nom_cook);
+						put("Le chiffre d'affaire de ");
+						put(nom_cook);put(" ");
 						put(prenom_cook);
-						put("est de :");
+						put(" est de :");
 						put(Tableau_Cuisinier(i).chiffre_affaire);
 						put_line("€");
 						exit;
@@ -130,7 +129,7 @@ Package body cuisinier is
 	
 --------------------------------------------------------
 	
-	Function count_prestation (Tableau_Cuisinier: T_club; Prestation: T_prestation) return integer is
+	Function cout_prestation (Tableau_Cuisinier: T_club; Prestation: T_prestation) return integer is
 		cout_prestation:integer;
 		Begin
 			for i in Tableau_Cuisinier'range loop
@@ -175,20 +174,4 @@ Package body cuisinier is
 			end if;
 	end depart;
 						
-
-------------------------------
-	Procedure Menu(option:out character) is
-	begin
-		loop
-			new_line;
-			Put_Line("Menu - Pour l'instant vous pouvez:");
-			Put_line("1 => Enregistrer un cuisinier");
-			Put_line("2 => Visualiser club");
-			Put_line("3 => Rien");
-			Put(" Choix :");
-			get(option);skip_line;
-			exit when option='1' or option='2' or option='3';
-			put("Erreur saisie");
-		end loop;
-	End Menu;
 	End cuisinier;
