@@ -91,18 +91,68 @@ Package body cuisinier is
 --------------------------------------------------------
 	
 	
-	Function chiffre_affaire (Tableau_Cuisinier:T_club; prestation: T_prestation; cook_nom, cook_prenom: nomination) return integer is
+	Procedure affichage_chiffre_affaire (Tableau_Cuisinier: IN T_club; cook_nom, cook_prenom: IN nomination) is
 		Begin
 			for i in Tableau_Cuisinier'range loop
 				if Tableau_Cuisinier(i).existe=true then
 					if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
-						return Tableau_Cuisinier(i).chiffre_affaire;
+						put("Le chiffre d'affaire de");
+						put(nom_cook);
+						put(prenom_cook);
+						put("est de :");
+						put(Tableau_Cuisinier(i).chiffre_affaire);
+						put_line("€");
 						exit;
 					end if;
 				end if;
 			end loop;
-			put_line("Ce cuisinier n'existe pas");
-	End chiffre_affaire;
+			put_line("Ce cuisinier n'existe pas, il n'a donc pas de chiffre d'affaire");
+	End affichage_chiffre_affaire;
+	
+--------------------------------------------------------
+
+	Procedure chiffre_affaire (Tableau_Cuisinier: IN OUT T_club;  cook_nom, cook_prenom: IN nomination; cout_prestation: IN integer) is
+		existe : boolean := false;
+		Begin
+			for i in Tableau_Cuisinier'range loop
+				if Tableau_Cuisinier(i).existe=true then
+					if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
+						existe:=true;
+						Tableau_Cuisinier(i).chiffre_affaire:=Tableau_Cuisinier(i).chiffre_affaire + cout_prestation;
+						exit;
+					end if;
+				end if
+			end loop;
+			if existe = false then
+				put_line("ERREUR: Gros probleme on a un cuisinier qui vient de faire une prestation qui n'est pas dans la base");
+			end if;
+	End chiffre_affaire;	
+	
+--------------------------------------------------------
+	
+	Function count_prestation (Tableau_Cuisinier: T_club; Prestation: T_prestation) return integer is
+		cout_prestation:integer;
+		Begin
+			for i in Tableau_Cuisinier'range loop
+				if Tableau_Cuisinier(i).existe=true then
+					if Prestation.nom_cuisinier=Tableau_Cuisinier(i).nom and Prestation.prenom_cuisinier=Tableau_Cuisinier(i).prenom then
+						if Prestation.nb_convives > 25 then
+							cout_prestation:=Prestation.nb_convives*33+Tableau_Cuisinier(i).forfait_cuisinier;
+						elsif Prestation.nb_convives > 10 then
+							cout_prestation:=Prestation.nb_convives*35+Tableau_Cuisinier(i).forfait_cuisinier;
+						elsif Prestation.nb_convives > 5 then
+							cout_prestation:=Prestation.nb_convives*40+Tableau_Cuisinier(i).forfait_cuisinier;
+						elsif Prestation.nb_convives > 0 then
+							cout_prestation:=Prestation.nb_convives*45+Tableau_Cuisinier(i).forfait_cuisinier;
+						else
+							put_line("ERREUR: 0 personnes ou moins à la prestation");
+						end if;
+						return(cout_prestation);
+					end if;
+				end if;
+			end loop;
+	End cout_prestation;	
+	
 
 --------------------------------------------------------
 
