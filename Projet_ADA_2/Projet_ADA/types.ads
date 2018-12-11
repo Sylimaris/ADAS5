@@ -12,8 +12,8 @@ package types is
 
 
 	Type T_Cuisinier is record
-		nom: nomination;
-		prenom: nomination;
+		nom: nomination := ('*',others =>' ');
+		prenom: nomination := ('*',others =>' ');
 		specialite : T_specialite;
 		forfait_cuisinier:integer:=30;
 		existe:boolean:= false; 		--test pour savoir si le cuisinier existe
@@ -38,6 +38,6 @@ package types is
 
 	Type T_demande is array (T_semaine'pos(mardi)..T_semaine'pos(samedi),1..NbC) of T_prestation; 
 	
-	Type T_planning is array (0..3) of T_demande;
+	Type T_planning is array (0..2) of T_demande;
 
 end types;
