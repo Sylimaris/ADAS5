@@ -18,7 +18,7 @@ package types is
 		forfait_cuisinier:integer:=30;
 		existe:boolean:= false; 		--test pour savoir si le cuisinier existe
 		somme_note_semaine: float; 		-- notes de la semaine
-		nb_repas_semaine:integer:=0;
+		nb_prestations_semaine:integer:=0;
 		nb_repas:integer:=0;
 		chiffre_affaire : integer:=0;   
 	end record;	
@@ -30,13 +30,15 @@ package types is
 		prenom_client : nomination;
 		nb_convives : positive;
 		specialite : T_specialite;
-		jour : T_semaine;
+		--jour : T_semaine; --Pas sur
 		note: notation;
 		nom_cuisinier: nomination;
 		prenom_cuisinier: nomination;
+		existe:boolean:=false;
+		cout_prestation:integer;
 	end record;
 
-	Type T_demande is array (T_semaine'pos(mardi)..T_semaine'pos(samedi),1..NbC) of T_prestation; 
+	Type T_demande is array (T_semaine range mardi..samedi,1..NbC) of T_prestation; 
 	
 	Type T_planning is array (0..2) of T_demande;
 
