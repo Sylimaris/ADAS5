@@ -27,7 +27,7 @@ Package body cuisinier is
 		get_line(s,k);
 		cook_specialite:=T_specialite'value(s(1..k));
 		--ERREUR à rajouter si le neuneu écrit mal
-	end saisie_specialite;
+	End saisie_specialite;
 
 ---------------------------------------------------------
 
@@ -47,24 +47,24 @@ Package body cuisinier is
 		if existe/=true then
 			for i in Tableau_Cuisinier'range loop
 				if Tableau_Cuisinier(i).existe=false then
-				    	Tableau_Cuisinier(i).nom:=cook_nom;
-				    	Tableau_Cuisinier(i).prenom:=cook_prenom;
-				    	Tableau_Cuisinier(i).specialite:=cook_specialite;
-				    	Tableau_Cuisinier(i).forfait_cuisinier:=30;
-				    	Tableau_Cuisinier(i).chiffre_affaire:=0;
-				    	Tableau_Cuisinier(i).existe:=true;
+				    Tableau_Cuisinier(i).nom:=cook_nom;
+				    Tableau_Cuisinier(i).prenom:=cook_prenom;
+				    Tableau_Cuisinier(i).specialite:=cook_specialite;
+				    Tableau_Cuisinier(i).forfait_cuisinier:=30;
+				    Tableau_Cuisinier(i).chiffre_affaire:=0;
+				    Tableau_Cuisinier(i).existe:=true;
 					Tableau_Cuisinier(i).somme_note_semaine:=0.0;
 					Tableau_Cuisinier(i).nb_repas_semaine:=0;
 					Tableau_Cuisinier(i).nb_repas:=0;
 					ecrit:=true;
 					exit;
-		        	end if;
-		    	end loop;
+		        end if;
+		    end loop;
 			if ecrit /=true then
 		    	put_line("Le nombre maximal de cuisiniers est déjà atteint");
 			end if;
 		end if;
-		end recrutement;
+	End recrutement;
 
 --------------------------------------------------------
 
@@ -87,20 +87,58 @@ Package body cuisinier is
 			end if;
 		end loop;
 	end affichage_club;		
+	
+--------------------------------------------------------
+	
+	
+	Function chiffre_affaire (Tableau_Cuisinier:T_club; prestation: T_prestation; cook_nom, cook_prenom: nomination) return integer is
+		Begin
+			for i in Tableau_Cuisinier'range loop
+				if Tableau_Cuisinier(i).existe=true then
+					if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
+						return Tableau_Cuisinier(i).chiffre_affaire;
+						exit;
+					end if;
+				end if;
+			end loop;
+			put_line("Ce cuisinier n'existe pas");
+	End chiffre_affaire;
+
+--------------------------------------------------------
+
+
+	Procedure depart (Tableau_Cuisinier: IN OUT T_club; cook_nom, cook_prenom: IN nomination; Registre:IN OUT T_demande) is
+		existe : boolean := false;
+		Begin
+			for i in Tableau_Cuisinier'range loop
+				if Tableau_Cuisinier(i).existe=true then
+					if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
+						existe:=true;
+					    Tableau_Cuisinier(i).existe:=false;
+						reatribution_commande(cook_nom, cook_prenom, Registre);
+						exit;
+					end if;
+				end if;
+			end loop;
+			if existe = false then
+				put_line("Ce cuisinier n'existe pas il ne peut donc pas etre supprimé");
+			end if;
+	end depart;
+						
 
 ------------------------------
-Procedure Menu(option:out character) is
-begin
-	loop
-		new_line;
-		Put_Line("Menu - Pour l'instant vous pouvez:");
-		Put_line("1 => Enregistrer un cuisinier");
-		Put_line("2 => Visualiser club");
-		Put_line("3 => Rien");
-		Put(" Choix :");
-		get(option);skip_line;
-		exit when option='1' or option='2' or option='3';
-		put("Erreur saisie");
-	end loop;
-end Menu;
-end cuisinier;
+	Procedure Menu(option:out character) is
+	begin
+		loop
+			new_line;
+			Put_Line("Menu - Pour l'instant vous pouvez:");
+			Put_line("1 => Enregistrer un cuisinier");
+			Put_line("2 => Visualiser club");
+			Put_line("3 => Rien");
+			Put(" Choix :");
+			get(option);skip_line;
+			exit when option='1' or option='2' or option='3';
+			put("Erreur saisie");
+		end loop;
+	End Menu;
+	End cuisinier;
