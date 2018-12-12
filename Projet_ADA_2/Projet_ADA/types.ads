@@ -26,8 +26,8 @@ package types is
 	Type T_club is array (1..NbC) of T_Cuisinier;
 
 	Type T_prestation is record
-		nom_client : nomination;
-		prenom_client : nomination;
+		nom_client : nomination:= ('*',others =>' ');
+		prenom_client : nomination:= ('*',others =>' ');
 		nb_convives : positive;
 		specialite : T_specialite;
 		--jour : T_semaine; --Pas sur

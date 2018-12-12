@@ -195,9 +195,9 @@ end saisie_prestation;
 						Planning(semaine)(jour,j).prenom_cuisinier:=prenom_cook;
 						Planning(semaine)(jour,j).existe:=true;
 						Planning(semaine)(jour,j).cout_prestation:=cout_prestation(Tableau_cuisinier,Planning(semaine)(jour,j));
-						new_line; put("La reservation sera effectuée par");
+						new_line; put("La reservation sera effectuée par ");
 						put(nom_cook);
-						put(prenom_cook);
+						put(prenom_cook);new_line;
 						ajout:=true;
 						exit;	
 					end if;
@@ -207,5 +207,68 @@ end saisie_prestation;
 			end if;
 	End report_sur_novice;
 
+---------------------------------
+
+Procedure affichage_planning (Planning : IN T_Planning) is
+	
+begin
+	for i in T'Planning'range loop
+		put("Semaine : ");
+		put(i);new_line;
+		for j in T_Semaine'range loop
+			put("Jour : ");
+			put(T_semaine'image(j));new_line;
+			for k in 1..NbC'range loop
+				if Planning(i)(j,k).existe then
+					new_line;
+					put(Planning(i)(j,k).nom_client); new_line;
+					put(Planning(i)(j,k).prenom_client); new_line;
+					put(Planning(i)(j,k).nb_convives); new_line;
+					put(T_specialite'image(Planning(i)(j,k).specialite)); new_line;
+					put(Planning(i)(j,k).nom_cuisinier); new_line;
+					put(Planning(i)(j,k).prenom_cuisinier); new_line;
+					put(Planning(i)(j,k).cout_prestation); new_line;new_line;
+				end if;
+			end loop;
+		end loop;
+	end loop;
+end affichage_planning;
+
+
+--------------------------------
+
+Procedure annulation (Planning: IN OUT T_Planning) is
+semaine is integer range 1..2;
+sjour:T_semaine;
+prenom_annulation,nom_annulation:nomination;
+specialite_annulation:T_specialite;
+k:integer;
+
+begin
+	Put("Saisir semaine prestation (semaine 1 ou semaine 2): ");
+	get(semaine);
+	skip_line;
+
+	new_line;
+
+	Put("Saisir le jour de la prestation à annuler (mardi, mercredi, jeudi, vendredi ou samedi): ");
+	get_line(sjour,k);
+	jour:=T_semaine'value(sjour(1..k));
+
+	new_line;
+
+	saisie_cook(prenom_annulation,nom_annulation);
+
+	saisie_specialite(specialite_annulation);
+	
+	For j in 1..NbC loop
+		if Planning(semaine)(jour,j).nom_client = nom_annulation and Planning(semaine)(jour,j).prenom_client = prenom_annulation and Planning(semaine)(jour,j).existe then
+			Planning(semaine)(jour,j).existe:=false;
+			Put("Prestation annulée");
+			new_line;
+			new_line;
+		end if;
+	end loop;
+end annulation;
 
 end client;

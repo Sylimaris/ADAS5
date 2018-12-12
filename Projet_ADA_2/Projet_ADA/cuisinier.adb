@@ -8,10 +8,10 @@ Package body cuisinier is
 	Procedure saisie_cook (cook_prenom,cook_nom: OUT nomination) is
 	k:integer;
 	Begin
-	    	Put("Saisir le prenom du cuisinier: ");
+	    	Put("Saisir le prenom: ");
 	    	get_line(cook_prenom,k);
 		new_line;
-	    	Put("Saisir le nom du cuisinier: ");
+	    	Put("Saisir le nom: ");
 	    	get_line(cook_nom,k);
 		new_line;
 		--Les vérifs sont à faire dans la procédure utilisant cette procédure, avec le tableau des T_cuisiniers.
@@ -181,4 +181,4 @@ Package body cuisinier is
 			end if;
 	end depart;
 						
-	End cuisinier;
+End cuisinier;

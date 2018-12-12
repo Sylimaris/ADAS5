@@ -6,9 +6,9 @@ Package client is
 
 	Procedure saisie_prestation (Planning: IN OUT T_planning;Tableau_cuisinier: IN T_club);
 
-	--Procedure nouvelle_prestation (D: IN OUT T_demande; prestation: IN T_prestation);
-
-	--Procedure annulation (prestation: IN T_prestation; D: IN OUT T_demande; J: IN T_semaine);
+	Procedure annulation (Planning: IN OUT T_Planning);
+	Procedure affichage_planning (Planning : IN T_Planning);
+	
 
 	--Procedure lendemain (J: IN OUT T_semaine; D: IN OUT T_demande; C: IN OUT T_club);
 
