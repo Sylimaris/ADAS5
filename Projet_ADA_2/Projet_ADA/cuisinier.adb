@@ -180,5 +180,26 @@ Package body cuisinier is
 				put_line("Ce cuisinier n'existe pas il ne peut donc pas etre supprimé");
 			end if;
 	end depart;
-						
+	
+-------------------------------
+
+Procedure note (Tableau_Cuisinier: IN OUT T_club; cook_nom, cook_prenom: IN nomination; note : IN notation) is 
+	existe : boolean := false; 
+Begin 
+	for i in Tableau_Cuisinier'range loop 
+		if Tableau_Cuisinier(i).existe=true and cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
+			Tableau_Cuisinier(i).somme_note_semaine:=Tableau_Cuisinier(i).somme_note_semaine+note; 
+			existe:=true; 
+			Tableau_Cuisinier(i).nb_prestations_semaine:=Tableau_Cuisinier(i).nb_prestations_semaine+1; 
+			exit; 
+		end if; 
+	end loop; 
+
+	if existe = false then 
+		put_line("ERREUR: Gros probleme on a un cuisinier qui vient de faire une prestation qui n'est pas dans la base"); 
+	end if; 
+
+End note;
+--------------------------------
+
 End cuisinier;
