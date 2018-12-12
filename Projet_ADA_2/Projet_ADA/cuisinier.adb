@@ -5,7 +5,7 @@ Package body cuisinier is
 
 ---------------------------------------------------------
 
-	Procedure saisie_cook (cook_prenom,cook_nom: OUT nomination; cook_specialite: OUT T_specialite) is
+	Procedure saisie_cook (cook_prenom,cook_nom: OUT nomination) is
 	k:integer;
 	Begin
 	    	Put("Saisir le prenom du cuisinier: ");
@@ -14,8 +14,7 @@ Package body cuisinier is
 	    	Put("Saisir le nom du cuisinier: ");
 	    	get_line(cook_nom,k);
 		new_line;
-		--ERREUR à rajouter si le neuneu écrit mal
-		
+		--Les vérifs sont à faire dans la procédure utilisant cette procédure, avec le tableau des T_cuisiniers.
 	end saisie_cook;
 
 ---------------------------------------------------------
