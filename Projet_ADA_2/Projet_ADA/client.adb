@@ -1,5 +1,5 @@
-with ada.text_io, ada.integer_text_io,ada.Float_Text_IO,types,ada.characters.handling,cuisinier;
-use ada.text_io, ada.integer_text_io,ada.Float_Text_IO,types,ada.characters.handling,cuisinier;
+with ada.text_io, ada.integer_text_io,ada.Float_Text_IO,types,ada.characters.handling;
+use ada.text_io, ada.integer_text_io,ada.Float_Text_IO,types,ada.characters.handling;
 
 Package body client is
 
@@ -64,7 +64,7 @@ begin
 For k in 1..Nbc loop -- parcourir la liste des cuisiniers
 	travaille:=false;
 	if Tableau_Cuisinier(k).specialite=cook_specialite then 	-- si le cuisinier est de la bonne spé
-		if Tableau_Cuisinier(k).nom = Planning(semaine)(jour,k).nom_cuisinier and Tableau_Cuisinier(k).prenom = Planning(semaine)(jour,k).prenom_cuisinier and Planning(semaine)(jour,k).existe=false then
+		if Tableau_Cuisinier(k).nom = Planning(semaine)(jour,j).nom_cuisinier and Tableau_Cuisinier(k).prenom = Planning(semaine)(jour,j).prenom_cuisinier and Planning(semaine)(jour,j).existe=false then
 			put ("Nom:");put(Tableau_Cuisinier(k).nom);new_line;
 			put ("Prénom:");put(Tableau_Cuisinier(k).prenom);new_line;new_line;
 			dispo:=true;
@@ -100,7 +100,7 @@ loop
 	saisie_cook(nom_cook,prenom_cook);
 			
 	for j in Tableau_cuisinier'range loop
-		if nom_cook=Tableau_cuisinier(j).nom and prenom_cook=Tableau_cuisinier(j).prenom and Tableau_cuisinier(j).existe and Tableau_cuisinier(j).specialite=cook_specialite then -- vérif qu'on est bien sur un vrai cuisinier + bonne orthographe + bonne spé
+		if nom_cook=Tableau_cuisinier(i).nom and prenom_cook=Tableau_cuisinier(i).prenom and Tableau_cuisinier(i).existe and Tableau_cuisinier(i).specialite=cook_specialite then -- vérif qu'on est bien sur un vrai cuisinier + bonne orthographe + bonne spé
 			
 -- Ajouter la vérification si on a choisi un vrai cuisinier de la même spé mais déjà occupé? --Oui obligé
 			
@@ -212,13 +212,13 @@ end saisie_prestation;
 Procedure affichage_planning (Planning : IN T_Planning) is
 	
 begin
-	for i in Planning'range loop
+	for i in T'Planning'range loop
 		put("Semaine : ");
 		put(i);new_line;
 		for j in T_Semaine'range loop
 			put("Jour : ");
 			put(T_semaine'image(j));new_line;
-			for k in 1..NbC loop
+			for k in 1..NbC'range loop
 				if Planning(i)(j,k).existe then
 					new_line;
 					put(Planning(i)(j,k).nom_client); new_line;
@@ -238,7 +238,7 @@ end affichage_planning;
 --------------------------------
 
 Procedure annulation (Planning: IN OUT T_Planning) is
-semaine : integer range 1..2;
+semaine is integer range 1..2;
 sjour:T_semaine;
 prenom_annulation,nom_annulation:nomination;
 specialite_annulation:T_specialite;
@@ -270,5 +270,57 @@ begin
 		end if;
 	end loop;
 end annulation;
+
+---------------------------------------------------
+
+	Procedure passage_au_lendemain(date_du_jour IN OUT: sjour; semaine : IN T_semaine; Tableau_Cuisinier: IN OUT T_club; Planning : IN OUT T_planning) is
+		Begin
+			for i in Tableau_cuisinier'range loop
+				if Planning(0)(date_du_jour,i).existe then				
+					saisie_note();
+					actualisation_note();
+					actualisation_chiffre_affaire();
+					actualisation_nb_repas_semaine();
+					archivage_prestation();
+					suppression_prestation();
+					actualisation_date_du_jour();
+				end if;
+			end loop;
+			
+	End passage_au_lendemain;
+	
+---------------------------------------------------
+		
+	Procedure saisie_note(Planning : IN OUT T_planning;date_du_jour IN : sjour; cuisto : IN integer) is
+		note:notation;
+		Begin
+			put("Saisir la note à attribuer par");
+			put(Planning(0)(date_du_jour,cuisto).nom_client);
+			put(Planning(0)(date_du_jour,cuisto).prenom_client);
+			get(note);skip_line;
+			----saisi securisée
+			Planning(0)(date_du_jour,cuisto).note:=note;
+	End saisie_note;
+	
+---------------------------------------------------
+		
+	Procedure actualisation_note(Tableau_Cuisinier: IN OUT T_club;  cook_nom, cook_prenom: IN nomination; note: IN notation) is
+		existe : boolean := false;
+		Begin
+			for i in Tableau_Cuisinier'range loop
+				if Tableau_Cuisinier(i).existe=true then
+					if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
+						existe:=true;
+						Tableau_Cuisinier(i).somme_note_semaine:=Tableau_Cuisinier(i).somme_note_semaine + note;
+						exit;
+					end if;
+				end if
+			end loop;
+			if existe = false then
+				put_line("ERREUR: Gros probleme on a un cuisinier qui vient de faire une prestation qui n'est pas dans la base");
+			end if;
+	End actualisation_note;
+		
+---------------------------------------------------
 
 end client;
