@@ -1,5 +1,5 @@
-with ada.text_io, ada.integer_text_io,ada.Float_Text_IO,ada.characters.handling,types,cuisinier;--,cuisinier,client,archive;  A MODIFIER POUR TEST
-use ada.text_io, ada.integer_text_io,ada.Float_Text_IO,ada.characters.handling,types,cuisinier;--,cuisinier,client,archive;   A MODIFIER POUR TEST
+with ada.text_io, ada.integer_text_io,ada.Float_Text_IO,ada.characters.handling,types,cuisinier,client;	--,archive;  A MODIFIER POUR TEST
+use ada.text_io, ada.integer_text_io,ada.Float_Text_IO,ada.characters.handling,types,cuisinier,client;	--,archive;   A MODIFIER POUR TEST
 
 Procedure main_projet is
 
