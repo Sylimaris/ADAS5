@@ -5,17 +5,18 @@ Package body cuisinier is
 
 ---------------------------------------------------------
 
-	Procedure Saisie_cook (cook_prenom,cook_nom: OUT nomination; cook_specialite: OUT T_specialite) is
+	Procedure saisie_cook (cook_prenom,cook_nom: OUT nomination; cook_specialite: OUT T_specialite) is
 	k:integer;
 	Begin
-	    	Put("Saisir un prenom: ");
+	    	Put("Saisir le prenom du cuisinier: ");
 	    	get_line(cook_prenom,k);
 		new_line;
-	    	Put("Saisir un nom: ");
+	    	Put("Saisir le nom du cuisinier: ");
 	    	get_line(cook_nom,k);
 		new_line;
-	  	saisie_specialite(cook_specialite);
-	end Saisie_cook;
+		--ERREUR à rajouter si le neuneu écrit mal
+		
+	end saisie_cook;
 
 ---------------------------------------------------------
 
@@ -23,7 +24,7 @@ Package body cuisinier is
 	s:string(1..33);k:integer;
 
 	begin
-	Put("Saisir une spécialité:");
+	Put("Saisir une spécialité (cuisine_francaise_traditionnelle, cuisine_vegetarienne, cuisine_asiatique, cuisine_du_maghreb, buffet)");
 		get_line(s,k);
 		cook_specialite:=T_specialite'value(s(1..k));
 		--ERREUR à rajouter si le neuneu écrit mal
@@ -37,7 +38,8 @@ Package body cuisinier is
 		cook_nom,cook_prenom: nomination := ('*',others =>' ');
 		cook_specialite: T_specialite;
 	Begin
-		Saisie_cook(cook_prenom,cook_nom,cook_specialite);		
+		saisie_cook(cook_prenom,cook_nom);
+		saisie_specialite(cook_specialite);	
 		for i in T_club'range loop
 			if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
 				put_line("Un cuisinier existe deja pour ce nom & prenom");
@@ -156,15 +158,21 @@ Package body cuisinier is
 --------------------------------------------------------
 
 
-	Procedure depart (Tableau_Cuisinier: IN OUT T_club; cook_nom, cook_prenom: IN nomination; Registre:IN OUT T_demande) is
+	Procedure depart (Tableau_Cuisinier: IN OUT T_club; Registre:IN OUT T_demande) is
+		cook_nom,cook_prenom: nomination := ('*',others =>' ');
+		cook_specialite: T_specialite;
 		existe : boolean := false;
 		Begin
+			put_line("Saisir le cuisinier sortant");
+			saisie_cook (cook_prenom,cook_nom);
+			
 			for i in Tableau_Cuisinier'range loop
 				if Tableau_Cuisinier(i).existe=true then
 					if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
 						existe:=true;
+						cook_specialite:=Tableau_Cuisinier(i).cook_specialite;
 					    Tableau_Cuisinier(i).existe:=false;
-						reatribution_commande(cook_nom, cook_prenom, Registre);
+						reatribution_commande(Tableau_Cuisinier, cook_nom, cook_prenom, cook_specialite, Registre);
 						exit;
 					end if;
 				end if;

@@ -38,7 +38,7 @@ package types is
 		cout_prestation:integer;
 	end record;
 
-	Type T_demande is array (T_semaine range mardi..samedi,1..NbC) of T_prestation; 
+	Type T_demande is array (T_semaine range mardi..samedi,1..NbC) of T_prestation; --Mardi..samedi ??? tu es sur que ça marche comme ça ?
 	
 	Type T_planning is array (0..2) of T_demande;
 
