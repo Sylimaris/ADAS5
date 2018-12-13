@@ -1,5 +1,5 @@
-with ada.text_io, ada.integer_text_io,ada.Float_Text_IO,types;
-use ada.text_io, ada.integer_text_io,ada.Float_Text_IO,types;
+with ada.text_io, ada.integer_text_io,ada.Float_Text_IO,types,client;
+use ada.text_io, ada.integer_text_io,ada.Float_Text_IO,types,client;
 
 Package body cuisinier is
 
@@ -40,7 +40,7 @@ Package body cuisinier is
 		saisie_cook(cook_prenom,cook_nom);
 		saisie_specialite(cook_specialite);	
 		for i in T_club'range loop
-			if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
+			if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom and Tableau_Cuisinier(i).existe then
 				put_line("Un cuisinier existe deja pour ce nom & prénom.");
 				existe:=true;
 			end if;
@@ -138,8 +138,7 @@ Package body cuisinier is
 
 --------------------------------------------------------
 
-
-	Procedure depart (Tableau_Cuisinier: IN OUT T_club; Registre:IN OUT T_demande) is
+	Procedure depart (Tableau_Cuisinier: IN OUT T_club; Planning:IN OUT T_Planning) is
 		cook_nom,cook_prenom: nomination := ('*',others =>' ');
 		cook_specialite: T_specialite;
 		existe : boolean := false;
@@ -152,16 +151,21 @@ Package body cuisinier is
 					if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
 						existe:=true;
 						cook_specialite:=Tableau_Cuisinier(i).specialite;
-					    Tableau_Cuisinier(i).existe:=false;
---						reatribution_commande(Tableau_Cuisinier, cook_nom, cook_prenom, cook_specialite, Registre);
+					    	Tableau_Cuisinier(i).existe:=false;
+						reatribution_commande(Tableau_Cuisinier, cook_nom, cook_prenom, cook_specialite, Planning);
 						exit;
 					end if;
 				end if;
 			end loop;
 			if existe = false then
 				put_line("Ce cuisinier n'existe pas il ne peut donc pas etre supprimé");
+			else
+			new_line;
+			put("Cuisinier supprimé, demandes réparties sur les autres cuisiniers (sauf message indiquant le contraire)");
+			new_line;
 			end if;
 	end depart;
 	
+----------------------------------
 
 End cuisinier;

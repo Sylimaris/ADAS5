@@ -5,7 +5,7 @@ package types is
 
 	Subtype notation is float range 1.0..6.0;
 	Subtype intSemaine is integer range 0..2;
-	Subtype nomination is string (1..20);
+	Subtype nomination is string (1..13);
 
 	Type T_semaine is (lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche);
 	Type T_specialite is (cuisine_francaise_traditionnelle, cuisine_vegetarienne, cuisine_asiatique, cuisine_du_maghreb, buffet);

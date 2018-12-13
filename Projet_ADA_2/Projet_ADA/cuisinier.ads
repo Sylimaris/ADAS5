@@ -3,7 +3,6 @@ use types;
 
 Package Cuisinier is
 
-	
 	Procedure saisie_cook (cook_prenom, cook_nom: OUT nomination);
 
 	Procedure saisie_specialite(cook_specialite: OUT T_specialite);
@@ -16,8 +15,7 @@ Package Cuisinier is
 
 	Function cout_prestation (Tableau_Cuisinier: T_club; Prestation: T_prestation) return integer;
 
-	Procedure depart (Tableau_Cuisinier: IN OUT T_club; Registre:IN OUT T_demande);--PLANNING A LA PLACE DE REGISTRE?
-
+	Procedure depart (Tableau_Cuisinier: IN OUT T_club; Planning:IN OUT T_planning);
 
 end cuisinier;
 
