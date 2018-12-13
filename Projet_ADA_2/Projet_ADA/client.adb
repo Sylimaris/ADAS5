@@ -212,13 +212,13 @@ end saisie_prestation;
 Procedure affichage_planning (Planning : IN T_Planning) is
 	
 begin
-	for i in T'Planning'range loop
+	for i in Planning'range loop
 		put("Semaine : ");
 		put(i);new_line;
 		for j in T_Semaine'range loop
 			put("Jour : ");
 			put(T_semaine'image(j));new_line;
-			for k in 1..NbC'range loop
+			for k in 1..NbC loop
 				if Planning(i)(j,k).existe then
 					new_line;
 					put(Planning(i)(j,k).nom_client); new_line;
@@ -238,7 +238,7 @@ end affichage_planning;
 --------------------------------
 
 Procedure annulation (Planning: IN OUT T_Planning) is
-semaine is integer range 1..2;
+Subtype semaine is integer range 1..2;
 sjour:T_semaine;
 prenom_annulation,nom_annulation:nomination;
 specialite_annulation:T_specialite;
@@ -273,16 +273,16 @@ end annulation;
 
 ---------------------------------------------------
 
-	Procedure passage_au_lendemain(date_du_jour IN OUT: sjour; Tableau_Cuisinier: IN OUT T_club; Planning : IN OUT T_planning) is
+	Procedure passage_au_lendemain(date_du_jour : IN OUT sjour; Tableau_Cuisinier : IN OUT T_club; Planning : IN OUT T_planning) is
 		note:notation;
 		Begin
 			for i in Tableau_cuisinier'range loop
 				if Planning(0)(date_du_jour,i).existe then				
 					saisie_note(Planning, date_du_jour, i);
 					actualisation_cuisinier(Tableau_Cuisinier, Planning, date_du_jour, i);
-					archivage_prestation();
-					suppression_prestation();
-					actualisation_date_du_jour();
+--					archivage_prestation();
+--					suppression_prestation();
+--					actualisation_date_du_jour();
 				end if;
 			end loop;
 			
@@ -290,7 +290,7 @@ end annulation;
 	
 ---------------------------------------------------
 		
-	Procedure saisie_note(Planning : IN OUT T_planning; date_du_jour IN : sjour; cuisto : IN integer) is
+	Procedure saisie_note(Planning : IN OUT T_planning; date_du_jour : IN sjour; cuisto : IN integer) is
 		note:notation;
 		Begin
 			put("Saisir la note à attribuer par");
@@ -304,18 +304,17 @@ end annulation;
 ---------------------------------------------------
 
 
-	Procedure actualisation_cuisinier(Tableau_Cuisinier: IN OUT T_club; Planning : IN T_planning; date_du_jour IN sjour; cuisto : IN integer);
+	Procedure actualisation_cuisinier(Tableau_Cuisinier: IN OUT T_club; Planning : IN T_planning; date_du_jour : IN sjour; cuisto : IN integer) is
 	existe : boolean := false;
 		Begin
 			for i in Tableau_cuisinier'range loop
 				if Planning(0)(date_du_jour,cuisto).existe and Tableau_Cuisinier(cuisto).existe=true then
-						existe:=true;
-						Tableau_Cuisinier(cuisto).somme_note_semaine:=Tableau_Cuisinier(cuisto).somme_note_semaine + Planning(0)(date_du_jour,cuisto).note;
-						Tableau_Cuisinier(cuisto).chiffre_affaire:=Tableau_Cuisinier(cuisto).chiffre_affaire + Planning(0)(date_du_jour,cuisto).cout_prestation;
-						Tableau_Cuisinier(cuisto).nb_repas:=Tableau_Cuisinier(cuisto).nb_repas + Planning(0)(date_du_jour,cuisto).nb_convives;
-						Tableau_Cuisinier(cuisto).nb_prestations_semaine:=Tableau_Cuisinier(cuisto).nb_prestations_semaine+1;				
-						exit;
-					end if;
+					existe:=true;
+					Tableau_Cuisinier(cuisto).somme_note_semaine:=Tableau_Cuisinier(cuisto).somme_note_semaine + Planning(0)(date_du_jour,cuisto).note;
+					Tableau_Cuisinier(cuisto).chiffre_affaire:=Tableau_Cuisinier(cuisto).chiffre_affaire + Planning(0)(date_du_jour,cuisto).cout_prestation;
+					Tableau_Cuisinier(cuisto).nb_repas:=Tableau_Cuisinier(cuisto).nb_repas + Planning(0)(date_du_jour,cuisto).nb_convives;
+					Tableau_Cuisinier(cuisto).nb_prestations_semaine:=Tableau_Cuisinier(cuisto).nb_prestations_semaine+1;				
+					exit;
 				end if;
 			end loop;
 			if existe = false then
