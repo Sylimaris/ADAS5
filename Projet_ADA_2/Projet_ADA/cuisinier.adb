@@ -97,8 +97,8 @@ Package body cuisinier is
 				if Tableau_Cuisinier(i).existe=true then
 					if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
 						put("Le chiffre d'affaire de ");
-						put(nom_cook);put(" ");
-						put(prenom_cook);
+						put(cook_nom);put(" ");
+						put(cook_prenom);
 						put(" est de :");
 						put(Tableau_Cuisinier(i).chiffre_affaire);
 						put_line("€");
@@ -128,10 +128,11 @@ Package body cuisinier is
 						else
 							put_line("ERREUR: 0 personnes ou moins à la prestation");
 						end if;
-						return(cout_prestation);
+						exit;
 					end if;
 				end if;
 			end loop;
+			return(cout_prestation);
 	End cout_prestation;	
 	
 
@@ -150,9 +151,9 @@ Package body cuisinier is
 				if Tableau_Cuisinier(i).existe=true then
 					if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
 						existe:=true;
-						cook_specialite:=Tableau_Cuisinier(i).cook_specialite;
+						cook_specialite:=Tableau_Cuisinier(i).specialite;
 					    Tableau_Cuisinier(i).existe:=false;
-						reatribution_commande(Tableau_Cuisinier, cook_nom, cook_prenom, cook_specialite, Registre);
+--						reatribution_commande(Tableau_Cuisinier, cook_nom, cook_prenom, cook_specialite, Registre);
 						exit;
 					end if;
 				end if;

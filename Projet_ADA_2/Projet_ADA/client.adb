@@ -23,7 +23,7 @@ Procedure saisie_prestation (Planning : IN OUT T_planning; Tableau_cuisinier: IN
 	choix:character;
 	
 		
-begin
+	Begin
 
 	--SAISIE--- ada.characters.handling --> to_upper to_lower
 
@@ -61,80 +61,78 @@ begin
 	put(" sont :");
 	new_line;new_line;
 			
-For k in 1..Nbc loop -- parcourir la liste des cuisiniers
-	travaille:=false;
-	if Tableau_Cuisinier(k).specialite=cook_specialite then 	-- si le cuisinier est de la bonne spé
-		if Tableau_Cuisinier(k).nom = Planning(semaine)(jour,j).nom_cuisinier and Tableau_Cuisinier(k).prenom = Planning(semaine)(jour,j).prenom_cuisinier and Planning(semaine)(jour,j).existe=false then
-			put ("Nom:");put(Tableau_Cuisinier(k).nom);new_line;
-			put ("Prénom:");put(Tableau_Cuisinier(k).prenom);new_line;new_line;
-			dispo:=true;
+	For k in 1..Nbc loop -- parcourir la liste des cuisiniers
+		travaille:=false;
+		if Tableau_Cuisinier(k).specialite=cook_specialite then 	-- si le cuisinier est de la bonne spé
+			if Tableau_Cuisinier(k).nom = Planning(semaine)(jour,k).nom_cuisinier and Tableau_Cuisinier(k).prenom = Planning(semaine)(jour,k).prenom_cuisinier and Planning(semaine)(jour,k).existe=false then
+				put ("Nom:");put(Tableau_Cuisinier(k).nom);new_line;
+				put ("Prénom:");put(Tableau_Cuisinier(k).prenom);new_line;new_line;
+				dispo:=true;
+			end if;
 		end if;
-	end if;
-end loop; --gérer la partie précédente, elle ne permet pas de voir les cuisiniers ne travaillant pas et de les afficher
+	end loop; --gérer la partie précédente, elle ne permet pas de voir les cuisiniers ne travaillant pas et de les afficher
 			
-if dispo then
-	put ("Aucun cuisinier de la spécialité recherchée n'est disponible, recommencez");
-	new_line;new_line;
-	exit; -- il faut sortir de la procédure et retourner au menu, l'user ne doit pas aller dans l'interface de choix qui suit
-end if;
+	if dispo=false then
+		put ("Aucun cuisinier de la spécialité recherchée n'est disponible, recommencez");
+		new_line;new_line;
+	else
 
 --- ENREGISTREMENT : Mise à jour du planning ---
 		 	
-loop			
-	put("Voulez-vous choisir un des cuisiniers présentés spécifiquement?");new_line;
-	put("1 - OUI");new_line;
-	put("2 - NON");new_line;
-	put("Choix ==> 1 ou 2 :");
-	get(choix);skip_line;
-	exit when choix = '1' or choix = '2';
-	new_line;	
-	put ("Erreur de choix, recommencez..");
-	new_line;
-end loop;
+		loop			
+			put("Voulez-vous choisir un des cuisiniers présentés spécifiquement?");new_line;
+			put("1 - OUI");new_line;
+			put("2 - NON");new_line;
+			put("Choix ==> 1 ou 2 :");
+			get(choix);skip_line;
+			exit when choix = '1' or choix = '2';
+			new_line;	
+			put ("Erreur de choix, recommencez..");
+			new_line;
+		end loop;
 	
-case choix is
-	when '1' =>	
-		
-loop
+		case choix is
+			when '1' =>
+			loop	
+				saisie_cook(nom_cook,prenom_cook);
 			
-	saisie_cook(nom_cook,prenom_cook);
-			
-	for j in Tableau_cuisinier'range loop
-		if nom_cook=Tableau_cuisinier(i).nom and prenom_cook=Tableau_cuisinier(i).prenom and Tableau_cuisinier(i).existe and Tableau_cuisinier(i).specialite=cook_specialite then -- vérif qu'on est bien sur un vrai cuisinier + bonne orthographe + bonne spé
+				for j in Tableau_cuisinier'range loop
+					if nom_cook=Tableau_cuisinier(j).nom and prenom_cook=Tableau_cuisinier(j).prenom and Tableau_cuisinier(j).existe and Tableau_cuisinier(j).specialite=cook_specialite then -- vérif qu'on est bien sur un vrai cuisinier + bonne orthographe + bonne spé
 			
 -- Ajouter la vérification si on a choisi un vrai cuisinier de la même spé mais déjà occupé? --Oui obligé
 			
-			if Planning(semaine)(jour,j).existe=false then
-				Planning(semaine)(jour,j).nom_client:=nom_client;
-				Planning(semaine)(jour,j).prenom_client:=prenom_client;
-				Planning(semaine)(jour,j).nb_convives:=nb_convives;
-				Planning(semaine)(jour,j).specialite:=cook_specialite;
-					--Planning(h)(i,j).jour --PAS SUR
-					--Planning(h)(i,j).note --Non définie pour le moment lors de la création
-				Planning(semaine)(jour,j).nom_cuisinier:=nom_cook;
-				Planning(semaine)(jour,j).prenom_cuisinier:=prenom_cook;
-				Planning(semaine)(jour,j).existe:=true;
-				new_line; put("Réservation ajoutée..");new_line;
-				Planning(semaine)(jour,j).cout_prestation:=cout_prestation(Tableau_cuisinier,Planning(semaine)(jour,j));
-				ajout:=true;
+					if Planning(semaine)(jour,j).existe=false then
+						Planning(semaine)(jour,j).nom_client:=nom_client;
+						Planning(semaine)(jour,j).prenom_client:=prenom_client;
+						Planning(semaine)(jour,j).nb_convives:=nb_convives;
+						Planning(semaine)(jour,j).specialite:=cook_specialite;
+						--Planning(h)(i,j).jour --PAS SUR
+						--Planning(h)(i,j).note --Non définie pour le moment lors de la création
+						Planning(semaine)(jour,j).nom_cuisinier:=nom_cook;
+						Planning(semaine)(jour,j).prenom_cuisinier:=prenom_cook;
+						Planning(semaine)(jour,j).existe:=true;
+						new_line; put("Réservation ajoutée..");new_line;
+						Planning(semaine)(jour,j).cout_prestation:=cout_prestation(Tableau_cuisinier,Planning(semaine)(jour,j));
+						ajout:=true;
+						exit;
+					end if;
+				end if;
+				if ajout then
+					exit;
+				end if;
+			end loop;
+			if ajout then
 				exit;
 			end if;
-		end if;
-		if ajout then
-			exit;
-		end if;
-	end loop;
-	if ajout then
-		exit;
-	end if;
-	put_line("Erreur dans l'écriture du cuisinier (nom et/ou prénom)"); 
-end loop;
+			put_line("Erreur dans l'écriture du cuisinier (nom et/ou prénom)"); 
+		end loop;
 
 		when '2' => -- Sélection du cuisinier de la spé ayant le moins fait de repas	
 			report_sur_novice(Tableau_Cuisinier,Planning,semaine,jour,j,specialite,nom_client,prenom_client,nb_convives);
 			
 		when others => put("Erreur saisie");									 
-	end case;
+		end case;
+	end if;
 end saisie_prestation;
 
 -----------------------------------------------------
