@@ -20,5 +20,7 @@ Package client is
 	
 	Procedure passage_au_lendemain(date_du_jour : IN OUT T_semaine; Tableau_Cuisinier : IN OUT T_club; Planning : IN OUT T_planning);
 	
+	Procedure actualisation_date_du_jour(Tableau_Cuisinier: IN OUT T_club; Planning : IN OUT T_planning; date_du_jour : IN OUT T_semaine);
+	
 
 end client;

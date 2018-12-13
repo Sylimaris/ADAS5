@@ -270,8 +270,7 @@ end annulation;
 					saisie_note(Planning, date_du_jour, i);
 					actualisation_cuisinier(Tableau_Cuisinier, Planning, date_du_jour, i);
 --					archivage_prestation();
---					suppression_prestation();
---					actualisation_date_du_jour();
+					actualisation_date_du_jour(Tableau_Cuisinier, Planning, date_du_jour);
 				end if;
 			end loop;
 			
@@ -310,6 +309,48 @@ end annulation;
 			put_line("ERREUR: Gros probleme on a un cuisinier qui vient de faire une prestation qui n'est pas dans la base");
 			end if;
 	End actualisation_cuisinier;
+	
+	Procedure actualisation_date_du_jour(Tableau_Cuisinier: IN OUT T_club; Planning : IN OUT T_planning; date_du_jour : IN OUT T_semaine) is
+		var:integer;
+		note_moyenne:float;
+		Begin
+			if date_du_jour=samedi then
+				--- Mise à jour des notes
+				for i in Tableau_Cuisinier'range loop
+					if Tableau_Cuisinier(i).existe=true then
+						note_moyenne:=Tableau_Cuisinier(i).somme_note_semaine/float(Tableau_Cuisinier(i).nb_prestations_semaine);
+						if note_moyenne<=2.0 and Tableau_Cuisinier(i).forfait_cuisinier>25 then
+							Tableau_Cuisinier(i).forfait_cuisinier:=Tableau_Cuisinier(i).forfait_cuisinier-5;
+						elsif note_moyenne>=5.0 and Tableau_Cuisinier(i).forfait_cuisinier<100 then
+							Tableau_Cuisinier(i).forfait_cuisinier:=Tableau_Cuisinier(i).forfait_cuisinier+5;
+						end if;
+					end if;
+				end loop;
+				
+				--- Mise à jour du planning
+				for s in 1..2 loop
+					for j in mardi..samedi loop
+						for c in 1..NbC loop
+							var:=c-1;
+							Planning(var)(j,c):=Planning(s)(j,c);
+						end loop;
+					end loop;
+				end loop;
+				for j in mardi..samedi loop
+					for c in 1..NbC loop
+						Planning(2)(j,c).existe:=false;
+					end loop;
+				end loop;
+			end if;
+			
+			--- Mise à jour du jour
+			if date_du_jour=T_semaine(date_du_jour)'last then
+				date_du_jour:=T_semaine(date_du_jour)'first;
+			else
+				date_du_jour:=T_semaine(date_du_jour)'succ;
+			end if;
+		
+	End actualisation_date_du_jour;
 	
 	
 	
