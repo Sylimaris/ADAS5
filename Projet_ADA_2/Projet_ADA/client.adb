@@ -166,12 +166,10 @@ end saisie_prestation;
 					ajout:= true;		
 				end if;
 			end loop;
-			
 			--mise en place du nouveau bon cuisinier 
-
 			if ajout then
 				for j in 1..NbC loop	
-					if Planning(semaine)(jour,j).nom_cuisinier=cook_nom and Planning(semaine)(jour,j).prenom_cuisinier=cook_prenom then
+					if Tableau_cuisinier(j).nom=cook_nom and Tableau_cuisinier(j).prenom=cook_prenom then
 						Planning(semaine)(jour,j).nom_client:=nom_client;
 						Planning(semaine)(jour,j).prenom_client:=prenom_client;
 						Planning(semaine)(jour,j).nb_convives:=nb_convives;
@@ -181,9 +179,9 @@ end saisie_prestation;
 						Planning(semaine)(jour,j).existe:=true;
 						Planning(semaine)(jour,j).cout_prestation:=cout_prestation(Tableau_cuisinier,Planning(semaine)(jour,j));
 						new_line; put("La reservation sera effectuée par ");
-						put(cook_nom);put(" ");
-						put(cook_prenom);new_line;
-						ajout:=true;
+						put(cook_nom);
+						put(cook_prenom);
+						new_line;
 						exit;	
 					end if;
 				end loop;

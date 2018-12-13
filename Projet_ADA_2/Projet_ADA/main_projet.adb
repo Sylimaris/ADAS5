@@ -18,12 +18,13 @@ Procedure Menu(option:out character) is
 			Put_Line("Menu - Pour l'instant vous pouvez:");
 			Put_line("1 => Enregistrer un cuisinier");
 			Put_line("2 => Visualiser club");
-			Put_line("3 => Entrer prestation PAS EN PLACE");
-			Put_line("4 => Visualiser Planning PAS EN PLACE");
-			Put_line("5 => Exit");
+			Put_line("3 => Entrer prestation ATTRIBU_NOVICE marche pas");
+			Put_line("4 => Visualiser Planning");
+			Put_line("5 => Supprimer un cuisinier");
+			Put_line("6 => Exit");
 			Put(" Choix :");
 			get(option);skip_line;
-			exit when option='1' or option='2' or option='3' or option='4' or option='5';
+			exit when option='1' or option='2' or option='3' or option='4' or option='5' or option='6';
 			put("Erreur saisie");
 		end loop;
 end Menu;
@@ -40,7 +41,9 @@ begin
 
 			when '4' =>affichage_planning(Planning);
 
-			when '5' =>exit;
+			--when '5' =>depart(Tableau_Cuisinier,Planning);			
+			
+			when '6' =>exit;
 			when others => put ("OULALA IMPOSSIBLE -> problème dans procédure MENU");
 		end case;
 	end loop;

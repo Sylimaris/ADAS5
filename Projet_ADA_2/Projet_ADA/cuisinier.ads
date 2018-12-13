@@ -16,7 +16,7 @@ Package Cuisinier is
 
 	Function cout_prestation (Tableau_Cuisinier: T_club; Prestation: T_prestation) return integer;
 
-	Procedure depart (Tableau_Cuisinier: IN OUT T_club; Registre:IN OUT T_demande);
+	Procedure depart (Tableau_Cuisinier: IN OUT T_club; Registre:IN OUT T_demande);--PLANNING A LA PLACE DE REGISTRE?
 
 
 end cuisinier;
