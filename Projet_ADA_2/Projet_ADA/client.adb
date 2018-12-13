@@ -266,13 +266,17 @@ end annulation;
 	Procedure passage_au_lendemain(date_du_jour : IN OUT T_semaine; Tableau_Cuisinier : IN OUT T_club; Planning : IN OUT T_planning) is
 		Begin
 			for i in Tableau_cuisinier'range loop
-				if Planning(0)(date_du_jour,i).existe then				
-					saisie_note(Planning, date_du_jour, i);
-					actualisation_cuisinier(Tableau_Cuisinier, Planning, date_du_jour, i);
+				if date_du_jour in mardi..samedi then
+					if Planning(0)(date_du_jour,i).existe then
+						saisie_note(Planning, date_du_jour, i);
+						actualisation_cuisinier(Tableau_Cuisinier, Planning, date_du_jour, i);				
 --					archivage_prestation();
-					actualisation_date_du_jour(Tableau_Cuisinier, Planning, date_du_jour);
+					end if;
 				end if;
 			end loop;
+			actualisation_date_du_jour(Tableau_Cuisinier, Planning, date_du_jour);
+			
+			
 			
 	End passage_au_lendemain;
 	
@@ -290,7 +294,6 @@ end annulation;
 	End saisie_note;
 	
 ---------------------------------------------------
-
 
 	Procedure actualisation_cuisinier(Tableau_Cuisinier: IN OUT T_club; Planning : IN T_planning; date_du_jour : IN T_semaine; cuisto : IN integer) is
 	existe : boolean := false;
@@ -310,11 +313,13 @@ end annulation;
 			end if;
 	End actualisation_cuisinier;
 	
+---------------------------------------------------
+	
 	Procedure actualisation_date_du_jour(Tableau_Cuisinier: IN OUT T_club; Planning : IN OUT T_planning; date_du_jour : IN OUT T_semaine) is
 		var:integer;
 		note_moyenne:float;
 		Begin
-			if date_du_jour=samedi then
+			if date_du_jour=T_semaine(date_du_jour)'last then
 				--- Mise à jour des notes
 				for i in Tableau_Cuisinier'range loop
 					if Tableau_Cuisinier(i).existe=true then
@@ -324,6 +329,11 @@ end annulation;
 						elsif note_moyenne>=5.0 and Tableau_Cuisinier(i).forfait_cuisinier<100 then
 							Tableau_Cuisinier(i).forfait_cuisinier:=Tableau_Cuisinier(i).forfait_cuisinier+5;
 						end if;
+						Tableau_Cuisinier(i).somme_note_semaine:=0.0;
+						Tableau_Cuisinier(i).nb_prestations_semaine:=0;
+						put(Tableau_Cuisinier(i).nom);
+						put(Tableau_Cuisinier(i).prenom);
+						put(note_moyenne,aft=>2,exp=>0);
 					end if;
 				end loop;
 				
