@@ -23,7 +23,7 @@ Package body cuisinier is
 	s:string(1..33);k:integer;
 
 	begin
-	Put("Saisir une spécialité (cuisine_francaise_traditionnelle, cuisine_vegetarienne, cuisine_asiatique, cuisine_du_maghreb, buffet)");
+	Put("Saisir une spécialité (cuisine_francaise_traditionnelle, cuisine_vegetarienne, cuisine_asiatique, cuisine_du_maghreb, buffet) :");
 		get_line(s,k);
 		cook_specialite:=T_specialite'value(s(1..k));
 		--ERREUR à rajouter si le neuneu écrit mal
@@ -41,7 +41,7 @@ Package body cuisinier is
 		saisie_specialite(cook_specialite);	
 		for i in T_club'range loop
 			if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
-				put_line("Un cuisinier existe deja pour ce nom & prenom");
+				put_line("Un cuisinier existe deja pour ce nom & prénom.");
 				existe:=true;
 			end if;
 		end loop;
@@ -62,7 +62,7 @@ Package body cuisinier is
 		        end if;
 		    end loop;
 			if ecrit /=true then
-		    	put_line("Le nombre maximal de cuisiniers est déjà atteint");
+		    	put_line("Le nombre maximal de cuisiniers est déjà atteint.");
 			end if;
 		end if;
 	End recrutement;
@@ -106,7 +106,7 @@ Package body cuisinier is
 					end if;
 				end if;
 			end loop;
-			put_line("Ce cuisinier n'existe pas, il n'a donc pas de chiffre d'affaire");
+			put_line("Ce cuisinier n'existe pas, il n'a donc pas de chiffre d'affaire.");
 	End affichage_chiffre_affaire;
 	
 --------------------------------------------------------

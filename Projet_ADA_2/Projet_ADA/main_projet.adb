@@ -4,9 +4,9 @@ use ada.text_io, ada.integer_text_io,ada.Float_Text_IO,ada.characters.handling,t
 Procedure main_projet is
 
 	Tableau_Cuisinier:T_club;
-	Registre:T_demande;
-	Jour:T_semaine;
-	Prestation: T_prestation;
+	--Registre:T_demande;
+	--Jour:T_semaine;
+	--Prestation: T_prestation;
 	Planning:T_planning;
 	option:character; -- pour menu
 
@@ -36,9 +36,9 @@ begin
 
 			when '2' =>affichage_club(Tableau_cuisinier);
 			
-			--when '3' =>saisie_prestation(Planning,Tableau_Cuisinier);
+			when '3' =>saisie_prestation(Planning,Tableau_Cuisinier);
 
-			--when '4' =>affichage_planning(Planning);
+			when '4' =>affichage_planning(Planning);
 
 			when '5' =>exit;
 			when others => put ("OULALA IMPOSSIBLE -> problème dans procédure MENU");
