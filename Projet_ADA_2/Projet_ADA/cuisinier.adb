@@ -97,8 +97,8 @@ Package body cuisinier is
 				if Tableau_Cuisinier(i).existe=true then
 					if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
 						put("Le chiffre d'affaire de ");
-						put(cook_nom);put(" ");
-						put(cook_prenom);
+						put(nom_cook);put(" ");
+						put(prenom_cook);
 						put(" est de :");
 						put(Tableau_Cuisinier(i).chiffre_affaire);
 						put_line("€");
@@ -111,25 +111,6 @@ Package body cuisinier is
 	
 --------------------------------------------------------
 
-	Procedure actualisation_chiffre_affaire (Tableau_Cuisinier: IN OUT T_club;  cook_nom, cook_prenom: IN nomination; cout_prestation: IN integer) is
-		existe : boolean := false;
-		Begin
-			for i in Tableau_Cuisinier'range loop
-				if Tableau_Cuisinier(i).existe=true then
-					if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
-						existe:=true;
-						Tableau_Cuisinier(i).chiffre_affaire:=Tableau_Cuisinier(i).chiffre_affaire + cout_prestation;
-						exit;
-					end if;
-				end if;
-			end loop;
-			if existe = false then
-				put_line("ERREUR: Gros probleme on a un cuisinier qui vient de faire une prestation qui n'est pas dans la base");
-			end if;
-	End actualisation_chiffre_affaire;	
-	
---------------------------------------------------------
-	
 	Function cout_prestation (Tableau_Cuisinier: T_club; Prestation: T_prestation) return integer is
 		cout_prestation:integer;
 		Begin
@@ -147,18 +128,17 @@ Package body cuisinier is
 						else
 							put_line("ERREUR: 0 personnes ou moins à la prestation");
 						end if;
-						exit;
+						return(cout_prestation);
 					end if;
 				end if;
 			end loop;
-	return(cout_prestation);
 	End cout_prestation;	
 	
 
 --------------------------------------------------------
 
 
-	Procedure depart (Tableau_Cuisinier: IN OUT T_club; Planning:IN OUT T_planning) is
+	Procedure depart (Tableau_Cuisinier: IN OUT T_club; Registre:IN OUT T_demande) is
 		cook_nom,cook_prenom: nomination := ('*',others =>' ');
 		cook_specialite: T_specialite;
 		existe : boolean := false;
@@ -172,7 +152,7 @@ Package body cuisinier is
 						existe:=true;
 						cook_specialite:=Tableau_Cuisinier(i).cook_specialite;
 					    Tableau_Cuisinier(i).existe:=false;
-						reatribution_commande(Tableau_Cuisinier, cook_nom, cook_prenom, cook_specialite, Planning);
+						reatribution_commande(Tableau_Cuisinier, cook_nom, cook_prenom, cook_specialite, Registre);
 						exit;
 					end if;
 				end if;
@@ -181,27 +161,6 @@ Package body cuisinier is
 				put_line("Ce cuisinier n'existe pas il ne peut donc pas etre supprimé");
 			end if;
 	end depart;
-			
+	
 
--------------------------------
-
-Procedure actualisation_note (Tableau_Cuisinier: IN OUT T_club; cook_nom, cook_prenom: IN nomination; note : IN notation) is 
-	existe : boolean := false; 
-Begin 
-	for i in Tableau_Cuisinier'range loop 
-		if Tableau_Cuisinier(i).existe=true and cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
-			Tableau_Cuisinier(i).somme_note_semaine:=Tableau_Cuisinier(i).somme_note_semaine+note; 
-			existe:=true; 
-			Tableau_Cuisinier(i).nb_prestations_semaine:=Tableau_Cuisinier(i).nb_prestations_semaine+1; 
-			exit; 
-		end if; 
-	end loop; 
-
-	if existe = false then 
-		put_line("ERREUR: Gros probleme on a un cuisinier qui vient de faire une prestation qui n'est pas dans la base"); 
-	end if; 
-
-End actualisation_note;
----------------
-			
 End cuisinier;

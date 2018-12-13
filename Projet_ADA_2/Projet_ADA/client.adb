@@ -273,14 +273,13 @@ end annulation;
 
 ---------------------------------------------------
 
-	Procedure passage_au_lendemain(date_du_jour IN OUT: sjour; semaine : IN T_semaine; Tableau_Cuisinier: IN OUT T_club; Planning : IN OUT T_planning) is
+	Procedure passage_au_lendemain(date_du_jour IN OUT: sjour; Tableau_Cuisinier: IN OUT T_club; Planning : IN OUT T_planning) is
+		note:notation;
 		Begin
 			for i in Tableau_cuisinier'range loop
 				if Planning(0)(date_du_jour,i).existe then				
-					saisie_note();
-					actualisation_note();
-					actualisation_chiffre_affaire();
-					actualisation_nb_repas_semaine();
+					saisie_note(Planning, date_du_jour, i);
+					actualisation_cuisinier(Tableau_Cuisinier, Planning, date_du_jour, cuisto);
 					archivage_prestation();
 					suppression_prestation();
 					actualisation_date_du_jour();
@@ -291,7 +290,7 @@ end annulation;
 	
 ---------------------------------------------------
 		
-	Procedure saisie_note(Planning : IN OUT T_planning;date_du_jour IN : sjour; cuisto : IN integer) is
+	Procedure saisie_note(Planning : IN OUT T_planning; date_du_jour IN : sjour; cuisto : IN integer) is
 		note:notation;
 		Begin
 			put("Saisir la note à attribuer par");
@@ -303,24 +302,48 @@ end annulation;
 	End saisie_note;
 	
 ---------------------------------------------------
-		
-	Procedure actualisation_note(Tableau_Cuisinier: IN OUT T_club;  cook_nom, cook_prenom: IN nomination; note: IN notation) is
-		existe : boolean := false;
+
+
+	Procedure actualisation_cuisinier(Tableau_Cuisinier: IN OUT T_club; Planning : IN T_planning; date_du_jour IN sjour; cuisto : IN integer);
+	existe : boolean := false;
 		Begin
-			for i in Tableau_Cuisinier'range loop
-				if Tableau_Cuisinier(i).existe=true then
-					if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
+			for i in Tableau_cuisinier'range loop
+				if Planning(0)(date_du_jour,cuisto).existe and Tableau_Cuisinier(cuisto).existe=true then
 						existe:=true;
-						Tableau_Cuisinier(i).somme_note_semaine:=Tableau_Cuisinier(i).somme_note_semaine + note;
+						Tableau_Cuisinier(cuisto).somme_note_semaine:=Tableau_Cuisinier(cuisto).somme_note_semaine + Planning(0)(date_du_jour,cuisto).note;
+						Tableau_Cuisinier(cuisto).chiffre_affaire:=Tableau_Cuisinier(cuisto).chiffre_affaire + Planning(0)(date_du_jour,cuisto).cout_prestation;
+						Tableau_Cuisinier(cuisto).nb_repas:=Tableau_Cuisinier(cuisto).nb_repas + Planning(0)(date_du_jour,cuisto).nb_convives;
+						Tableau_Cuisinier(cuisto).nb_prestations_semaine:=Tableau_Cuisinier(cuisto).nb_prestations_semaine+1;				
 						exit;
 					end if;
-				end if
+				end if;
 			end loop;
 			if existe = false then
-				put_line("ERREUR: Gros probleme on a un cuisinier qui vient de faire une prestation qui n'est pas dans la base");
+			put_line("ERREUR: Gros probleme on a un cuisinier qui vient de faire une prestation qui n'est pas dans la base");
 			end if;
-	End actualisation_note;
-		
----------------------------------------------------
+	End actualisation_cuisinier;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 
 end client;
