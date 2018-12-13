@@ -279,7 +279,7 @@ end annulation;
 			for i in Tableau_cuisinier'range loop
 				if Planning(0)(date_du_jour,i).existe then				
 					saisie_note(Planning, date_du_jour, i);
-					actualisation_cuisinier(Tableau_Cuisinier, Planning, date_du_jour, cuisto);
+					actualisation_cuisinier(Tableau_Cuisinier, Planning, date_du_jour, i);
 					archivage_prestation();
 					suppression_prestation();
 					actualisation_date_du_jour();
