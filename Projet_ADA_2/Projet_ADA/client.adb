@@ -365,7 +365,7 @@ end annulation;
 				for s in 1..2 loop
 					for j in mardi..samedi loop
 						for c in 1..NbC loop
-							var:=c-1;
+							var:=s-1;
 							Planning(var)(j,c):=Planning(s)(j,c);
 						end loop;
 					end loop;
