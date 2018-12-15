@@ -292,7 +292,7 @@ end annulation;
 			for i in Tableau_cuisinier'range loop
 				if date_du_jour in mardi..samedi then
 					if Planning(0)(date_du_jour,i).existe then
-						saisie_note(Planning, date_du_jour, i);
+						--saisie_note(Planning, date_du_jour, i);
 						actualisation_cuisinier(Tableau_Cuisinier, Planning, date_du_jour, i);				
 --					archivage_prestation();
 					end if;
@@ -343,8 +343,16 @@ end annulation;
 		var:integer;
 		note_moyenne:float;
 		Begin
+			put("Passage au ");
+			if date_du_jour=T_semaine'last then
+				put(T_semaine'image(T_semaine'first));
+			else
+				put(T_semaine'image(T_semaine'succ(date_du_jour)));			
+			end if;
+			new_line;
 			if date_du_jour=T_semaine'last then
 				--- Mise à jour des notes
+				put_line("Calcul des notes de la semaines ...");
 				for i in Tableau_Cuisinier'range loop
 					if Tableau_Cuisinier(i).existe then
 						if Tableau_Cuisinier(i).nb_prestations_semaine/=0 then
@@ -359,13 +367,14 @@ end annulation;
 						put(Tableau_Cuisinier(i).nom);
 						put(Tableau_Cuisinier(i).prenom);
 						put(note_moyenne,aft=>2,exp=>0);
+						new_line;
 						end if;
 					end if;
 				end loop;
 				
 				--- Mise à jour du planning
 				for s in 1..2 loop
-					for j in mardi..samedi loop
+					for j in mardi..samedi loop						
 						for c in 1..NbC loop
 							var:=s-1;
 							Planning(var)(j,c):=Planning(s)(j,c);
