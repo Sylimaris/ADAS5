@@ -17,7 +17,7 @@ package types is
 		specialite : T_specialite;
 		forfait_cuisinier:integer:=30;
 		existe:boolean:= false; 		--test pour savoir si le cuisinier existe
-		somme_note_semaine: float; 		-- notes de la semaine
+		somme_note_semaine: float:=0.0; 		-- notes de la semaine
 		nb_prestations_semaine:integer:=0;
 		nb_repas:integer:=0;
 		chiffre_affaire : integer:=0;   

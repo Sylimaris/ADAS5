@@ -346,7 +346,8 @@ end annulation;
 			if date_du_jour=T_semaine'last then
 				--- Mise à jour des notes
 				for i in Tableau_Cuisinier'range loop
-					if Tableau_Cuisinier(i).existe=true then
+					if Tableau_Cuisinier(i).existe then
+						if Tableau_Cuisinier(i).nb_prestations_semaine/=0 then
 						note_moyenne:=Tableau_Cuisinier(i).somme_note_semaine/float(Tableau_Cuisinier(i).nb_prestations_semaine);
 						if note_moyenne<=2.0 and Tableau_Cuisinier(i).forfait_cuisinier>25 then
 							Tableau_Cuisinier(i).forfait_cuisinier:=Tableau_Cuisinier(i).forfait_cuisinier-5;
@@ -358,6 +359,7 @@ end annulation;
 						put(Tableau_Cuisinier(i).nom);
 						put(Tableau_Cuisinier(i).prenom);
 						put(note_moyenne,aft=>2,exp=>0);
+						end if;
 					end if;
 				end loop;
 				
