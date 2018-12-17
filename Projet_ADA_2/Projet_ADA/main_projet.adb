@@ -31,7 +31,7 @@ Procedure Menu(option:out character) is
 			Put_line("5 => Supprimer un cuisinier");
 			Put_line("6 => Passer au jour suivant");
 			Put_line("7 => Supprimer une prestation");
-			Put_line("8 => Accéder aux options de lecture des archives);
+			Put_line("8 => Accéder aux options de lecture des archives");
  			Put_line("9 => Exit");
 			Put(" Choix :");
 			get(option);skip_line;
@@ -71,6 +71,8 @@ begin
 						when '3' =>saisie_prestation(Planning,Tableau_Cuisinier);
 
 						when '4' =>exit;
+				
+						when others => put ("C'EST IMPOSSIBLE -> problème dans procédure MENU");
 					end case;
 				end loop;
 

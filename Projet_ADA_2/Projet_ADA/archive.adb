@@ -3,10 +3,10 @@ use ada.text_io, ada.integer_text_io,ada.float_text_io,types,cuisinier;
 
 Package body archive is
    
+	use P_Fichier_archive;
 
 procedure Archivage (Prestation: IN T_Prestation) is
 	
-	package P_Fichier_archive is new ada.Sequential_io(Planning);
 	use P_Fichier_archive;
 	File:P_Fichier_archive.file_type;
 
@@ -16,8 +16,9 @@ procedure Archivage (Prestation: IN T_Prestation) is
 		exception
 			when others=>create(File,name=>"Archive.sortie");
 		end;
-
-	write(File,Prestation);
+	if Prestation.existe then
+		Write(File,Prestation);
+	end if;
 	close(File);
 end Archivage;
 
@@ -28,7 +29,7 @@ end Archivage;
 
 procedure Lecture_client is
 	Prestation : T_prestation;
-	File:Fichier_T_Prestation.file_type;
+	File:P_Fichier_archive.file_type;
 	nom_client,prenom_client:nomination;
 	compteur:integer:=0;
 
@@ -71,10 +72,10 @@ end Lecture_client;
 
 procedure Lecture_cuisinier is
 	Prestation : T_prestation;
-	File:Fichier_T_Prestation.file_type;
-	nom_client,prenom_client:nomination;
+	File:P_Fichier_archive.file_type;
+	nom_cuisinier,prenom_cuisinier:nomination;
 	compteur:integer:=0;
-	total:integer:=0
+	total:integer:=0;
 
 begin
 	begin
@@ -83,12 +84,12 @@ begin
 
 new_line;
 Put("Nom et prénom du cuisinier à chercher:");
-saisie_cook(prenom_client,nom_client);
+saisie_cook(prenom_cuisinier,nom_cuisinier);
 
 while not End_Of_File(File) loop
 	Read(File,Prestation);
 		if Prestation.nom_cuisinier=nom_cuisinier and Prestation.prenom_cuisinier=prenom_cuisinier then
-			compteur:=compteur+1			
+			compteur:=compteur+1;			
 			total:=total+Prestation.cout_prestation;
 			put("Prestation ");put(compteur);new_line;
 			put("Nombre de convives: ");put(Prestation.nb_convives,width=>0); new_line;
@@ -117,7 +118,7 @@ end Lecture_cuisinier;
 
 procedure Specialite_info is
 	Prestation : T_prestation;
-	File:Fichier_T_Prestation.file_type;
+	File:P_Fichier_archive.file_type;
 	specialite : T_specialite;
 	compteur:integer:=0;
 	total_note:float:=0.0;
@@ -180,9 +181,6 @@ begin
 		put("Erreur saisie");
 	end loop;
 end menu_archive;
-
-
-
 
 
 end archive;
