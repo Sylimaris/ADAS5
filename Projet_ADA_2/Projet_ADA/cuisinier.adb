@@ -8,12 +8,24 @@ Package body cuisinier is
 	Procedure saisie_cook (cook_prenom,cook_nom: OUT nomination) is
 	k:integer;
 	Begin
-	    	Put("Saisir le prenom: ");
-	    	get_line(cook_prenom,k);
-		new_line;
-	    	Put("Saisir le nom: ");
-	    	get_line(cook_nom,k);
-		new_line;
+		put_line("Saisir le nom: ");
+		loop
+			Begin
+	    		get_line(cook_prenom,k);
+				exit;
+				exception
+				when constraint_error => put_line("Erreur de la saisie du nom, ressaisissez..");
+			end;
+		end loop;
+		put_line("Saisir le prenom: ");
+		loop
+			Begin
+	    		get_line(cook_prenom,k);
+				exit;
+				exception
+				when constraint_error => put_line("Erreur de la saisie du prenom, ressaisissez..");
+			end;
+		end loop;
 		--Les vérifs sont à faire dans la procédure utilisant cette procédure, avec le tableau des T_cuisiniers.
 	end saisie_cook;
 
@@ -22,11 +34,17 @@ Package body cuisinier is
 	Procedure saisie_specialite (cook_specialite : OUT T_specialite) is
 	s:string(1..33);k:integer;
 
-	begin
-	Put("Saisir une spécialité (cuisine_francaise_traditionnelle, cuisine_vegetarienne, cuisine_asiatique, cuisine_du_maghreb, buffet) :");
-		get_line(s,k);
-		cook_specialite:=T_specialite'value(s(1..k));
-		--ERREUR à rajouter si le neuneu écrit mal
+	Begin
+	put_line("Saisir une spécialité (cuisine_francaise_traditionnelle, cuisine_vegetarienne, cuisine_asiatique, cuisine_du_maghreb, buffet) :");	
+		loop
+			Begin
+				get_line(s,k);
+				cook_specialite:=T_specialite'value(s(1..k));
+				exit;
+				exception
+				when constraint_error => put_line("Erreur de la saisie de la spécialité, ressaisissez..");
+			end;
+		end loop;
 	End saisie_specialite;
 
 ---------------------------------------------------------
@@ -37,6 +55,7 @@ Package body cuisinier is
 		cook_nom,cook_prenom: nomination := ('*',others =>' ');
 		cook_specialite: T_specialite;
 	Begin
+		put_line("Saisir l'identité cuisinier:");
 		saisie_cook(cook_prenom,cook_nom);
 		saisie_specialite(cook_specialite);	
 		for i in T_club'range loop

@@ -14,52 +14,45 @@ Procedure saisie_prestation (Planning : IN OUT T_planning; Tableau_cuisinier: IN
 	nb_convives:positive;
 	cook_specialite:T_specialite;
 	jour:T_semaine;
-	semaine:integer range 1..2; 
+	semaine:integer range 1..2;
 	k:integer;
 	sjour:string(1..9);
 	ajout,travaille,dispo,test_cuisto_spe:boolean:=false;
 	compteurCook:integer:=0;
-	choix:character;
-	
+	choix:character;	
 		
 	Begin
+		put_line("Saisir l'identité client:");
+		saisie_cook(nom_client,prenom_client);	
+		saisie_specialite(cook_specialite);
 
-	--SAISIE--- ada.characters.handling --> to_upper to_lower
-
-	saisie_cook(nom_client,prenom_client);
-	
-
-	put ("Saisir le nombre de convives:");
-	get(nb_convives);skip_line;
-	new_line;
-
-	saisie_specialite(cook_specialite);
-	For i in Tableau_cuisinier'range loop
+		For i in Tableau_cuisinier'range loop
 		if Tableau_cuisinier(i).specialite=cook_specialite and Tableau_cuisinier(i).existe then
 			test_cuisto_spe:=true;
 			exit;
 		end if;
 	end loop;
-
-if test_cuisto_spe=false then
-	new_line;
-	put("Pas de cuisinier de cette spécialité actuellement.");
-	new_line;
-else
-
+	
+	put_line("Saisir le nombre de convives:");
 	loop
-		Put("Saisir la semaine visée (1 = semaine prochaine | 2 = dans deux semaines): ");
-		get(semaine);skip_line;
-		new_line;
-		exit when semaine=1 or semaine=2;
-		new_line;
-		put("WARNING : Mauvais chiffre entré, recommencez.");new_line;
+		Begin
+			get(nb_convives);skip_line;
+			exit;
+			exception
+			when data_error => skip_line;
+			put_line("Erreur dans la saisie du nombre de convives, ressaisissez..");
+		end;
 	end loop;
 
-	Put("Saisir le jour voulu (mardi, mercredi, jeudi, vendredi ou samedi): ");
-	get_line(sjour,k);
-	--To_Lower (sjour); -- Eviter des majuscules
-	jour:=T_semaine'value(sjour(1..k));
+	if test_cuisto_spe=false then
+		new_line;
+		put("Pas de cuisinier de cette spécialité actuellement.");
+		new_line;
+	else
+		saisie_semaine(semaine);
+		put("Nous ne travaillons pas les dimanche et lundi");
+		new_line;
+		saisie_jour(jour);
 
 	--- FIN DES SAISIES --- 
 
@@ -69,81 +62,115 @@ else
 	--	3 - Afficher les possibilités (ou un message si il n'y en a pas)
 	--	4 - Mettre à jour le planning en insérant la demande
 	
-	new_line;new_line;
-	Put("Les cuisiniers disponibles pour cette spécialité le ");
-	put(T_semaine'image(jour));
-	put(" de la semaine ");
-	put(semaine);
-	put(" sont :");
-	new_line;new_line;
-			
-	For k in 1..Nbc loop -- parcourir la liste des cuisiniers
-		travaille:=false;
-		if Tableau_Cuisinier(k).specialite=cook_specialite and Tableau_Cuisinier(k).existe then 	-- si le cuisinier est de la bonne spé
-			if Planning(semaine)(jour,k).existe=false then
-				put ("Nom:");put(Tableau_Cuisinier(k).nom);new_line;
-				put ("Prénom:");put(Tableau_Cuisinier(k).prenom);new_line;new_line;
-				dispo:=true;
-			end if;
-		end if;
-	end loop; --gérer la partie précédente, elle ne permet pas de voir les cuisiniers ne travaillant pas et de les afficher
-			
-	if dispo=false then
-		put ("Tous les cuisiniers de cette spé sont occupés, recommencez un autre jour si vous tenez à cette spécialité");
 		new_line;new_line;
-	else
+		Put("Les cuisiniers disponibles pour cette spécialité le ");
+		put(T_semaine'image(jour));
+		put(" de la semaine ");
+		put(semaine);
+		put(" sont :");
+		new_line;new_line;
+			
+		For k in 1..Nbc loop -- parcourir la liste des cuisiniers
+			travaille:=false;
+			if Tableau_Cuisinier(k).specialite=cook_specialite and Tableau_Cuisinier(k).existe then 	-- si le cuisinier est de la bonne spé
+				if Planning(semaine)(jour,k).existe=false then
+					put ("Nom:");put(Tableau_Cuisinier(k).nom);new_line;
+					put ("Prénom:");put(Tableau_Cuisinier(k).prenom);new_line;new_line;
+					dispo:=true;
+				end if;
+			end if;
+		end loop; --gérer la partie précédente, elle ne permet pas de voir les cuisiniers ne travaillant pas et de les afficher
+			
+		if dispo=false then
+			put ("Tous les cuisiniers de cette spé sont occupés, recommencez un autre jour si vous tenez à cette spécialité");
+			new_line;new_line;
+		else
 
 --- ENREGISTREMENT : Mise à jour du planning ---
 		 	
-		loop			
+						
 			put("Voulez-vous choisir le/un de(s) cuisinier(s) présenté(s) spécifiquement?");new_line;
 			put("1 - OUI");new_line;
 			put("2 - NON");new_line;
-			put("Choix ==> 1 ou 2 :");
-			get(choix);skip_line;
-			exit when choix = '1' or choix = '2';
-			new_line;	
-			put ("Erreur de choix, recommencez..");
-			new_line;
-		end loop;
-	
-		case choix is
-			when '1' =>
-			loop	
-				saisie_cook(prenom_cook,nom_cook);
-				for j in 1..NbC loop
-					if nom_cook=Tableau_cuisinier(j).nom and prenom_cook=Tableau_cuisinier(j).prenom and Tableau_cuisinier(j).existe and Tableau_cuisinier(j).specialite=cook_specialite  and Planning(semaine)(jour,j).existe=false then -- vérif qu'on est bien sur un vrai cuisinier + bonne orthographe + bonne spé + pas en travail		
-						Planning(semaine)(jour,j).nom_client:=nom_client;
-						Planning(semaine)(jour,j).prenom_client:=prenom_client;
-						Planning(semaine)(jour,j).nb_convives:=nb_convives;
-						Planning(semaine)(jour,j).specialite:=cook_specialite;
+			put_line("Choix ==> 1 ou 2 :");
+			loop
+				Begin
+					get(choix);skip_line;
+					exit when choix = '1' or choix = '2';
+					put_line("Erreur de choix, ressaisissez..");
+				end;
+			end loop;
+				
+			case choix is
+				when '1' =>
+					loop	
+						saisie_cook(prenom_cook,nom_cook);
+						for j in 1..NbC loop
+							if nom_cook=Tableau_cuisinier(j).nom and prenom_cook=Tableau_cuisinier(j).prenom and Tableau_cuisinier(j).existe and Tableau_cuisinier(j).specialite=cook_specialite  and Planning(semaine)(jour,j).existe=false then -- vérif qu'on est bien sur un vrai cuisinier + bonne orthographe + bonne spé + pas en travail		
+								Planning(semaine)(jour,j).nom_client:=nom_client;
+								Planning(semaine)(jour,j).prenom_client:=prenom_client;
+								Planning(semaine)(jour,j).nb_convives:=nb_convives;
+								Planning(semaine)(jour,j).specialite:=cook_specialite;
 						--Planning(h)(i,j).jour --PAS SUR
 						--Planning(h)(i,j).note --Non définie pour le moment lors de la création
-						Planning(semaine)(jour,j).nom_cuisinier:=nom_cook;
-						Planning(semaine)(jour,j).prenom_cuisinier:=prenom_cook;
-						Planning(semaine)(jour,j).existe:=true;
-						new_line; put("Réservation ajoutée!");new_line;
-						Planning(semaine)(jour,j).cout_prestation:=cout_prestation(Tableau_cuisinier,Planning(semaine)(jour,j));
-						ajout:=true;
-						exit;
-					end if;
-				end loop;
-			if ajout then
-				exit;
-			end if;
-			put_line("Erreur dans l'écriture du cuisinier (nom et/ou prénom)"); 
-			end loop;
+								Planning(semaine)(jour,j).nom_cuisinier:=nom_cook;
+								Planning(semaine)(jour,j).prenom_cuisinier:=prenom_cook;
+								Planning(semaine)(jour,j).existe:=true;
+								new_line; put("Réservation ajoutée!");new_line;
+								Planning(semaine)(jour,j).cout_prestation:=cout_prestation(Tableau_cuisinier,Planning(semaine)(jour,j));
+								ajout:=true;
+								exit;
+							end if;
+						end loop;
+						if ajout then
+							exit;
+						end if;
+						put_line("Erreur dans l'écriture du cuisinier (nom et/ou prénom)"); 
+					end loop;
 
-		when '2' => -- Sélection du cuisinier de la spé ayant le moins fait de repas	
-			report_sur_novice(Tableau_Cuisinier,Planning,semaine,jour,cook_specialite,nom_client,prenom_client,nb_convives);
-			new_line; put("Réservation ajoutée!");new_line;
-		when others => put("Erreur saisie");									 
-		end case;
-	end if;
-end if;
-end saisie_prestation;
+				when '2' => -- Sélection du cuisinier de la spé ayant le moins fait de repas	
+					report_sur_novice(Tableau_Cuisinier,Planning,semaine,jour,cook_specialite,nom_client,prenom_client,nb_convives);
+					new_line; put("Réservation ajoutée!");new_line;
+				when others => put("Erreur saisie");									 
+				end case;
+			end if;
+		end if;
+End saisie_prestation;
 
 -----------------------------------------------------
+
+	Procedure saisie_semaine(semaine : OUT integer) is
+		Begin
+			put_line("Saisir la semaine visée (1 = semaine prochaine | 2 = dans deux semaines): ");
+			loop
+				Begin
+					get(semaine);skip_line;
+					exit when semaine=1 or semaine=2;
+					exception
+						when data_error => skip_line;
+						put_line("Erreur dans la saisie de la semaine, ressaisissez..");
+					end;
+			end loop;
+	End saisie_semaine;
+	
+-----------------------------------------------------	
+	
+	Procedure saisie_jour(jour : OUT T_semaine) is
+		Begin
+			put_line("Saisir le jour voulu: mardi, mercredi, jeudi, vendredi ou samedi");
+			loop
+				Begin
+					get_line(sjour,k);
+					jour:=T_semaine'value(sjour(1..k));
+					exit when jour in mardi..samedi;
+					exception
+						when constraint_error => put_line("Erreur de la saisie du jour, ressaisissez..");
+				end;
+			end loop;
+	end saisie_jour;
+
+-----------------------------------------------------
+
 	Procedure reatribution_commande(Tableau_Cuisinier: IN T_club; cook_nom, cook_prenom : IN nomination; cook_specialite : IN T_specialite; Planning : IN OUT T_planning) is
 		nom_client : nomination;
 		prenom_client : nomination;
@@ -159,7 +186,7 @@ end saisie_prestation;
 								nom_client:=Planning(semaine)(jour,j).nom_client;
 								prenom_client:=Planning(semaine)(jour,j).prenom_client;
 								nb_convives:=Planning(semaine)(jour,j).nb_convives;
-				report_sur_novice(Tableau_Cuisinier,Planning,semaine,jour,cook_specialite,nom_client,prenom_client,nb_convives);
+								report_sur_novice(Tableau_Cuisinier,Planning,semaine,jour,cook_specialite,nom_client,prenom_client,nb_convives);
 							exit;
 							end if;
 						end if;
@@ -240,50 +267,33 @@ begin
 	end loop;
 end affichage_planning;
 
+---------------------------------------------------
 
---------------------------------
+	Procedure annulation (Planning: IN OUT T_Planning) is
+		sjour:string(1..9);
+		prenom_annulation,nom_annulation:nomination;
+		specialite_annulation:T_specialite;
+		k:integer;
+		semaine:integer;
+		jour:T_semaine;
 
-Procedure annulation (Planning: IN OUT T_Planning) is
-sjour:string(1..9);
-prenom_annulation,nom_annulation:nomination;
-specialite_annulation:T_specialite;
-k:integer;
-semaine:integer;
-jour:T_semaine;
-
-begin
-
-	loop
-		Put("Les demandes d'annulation ne peuvent être annulées que pour les semaines à venir, la semaine en cours (0) est figée.");
-		new_line;
-		Put("Saisir semaine prestation (semaine 1 ou semaine 2): ");
-		get(semaine);skip_line;
-		exit when semaine = 1 or semaine =2;
-		new_line;
-		put("Erreur saisie semaine, recommencez: ");
-	end loop;
-
-	new_line;
-
-	Put("Saisir le jour de la prestation à annuler (mardi, mercredi, jeudi, vendredi ou samedi): ");
-	get_line(sjour,k);
-	jour:=T_semaine'value(sjour(1..k));
-
-	new_line;
-
-	saisie_cook(prenom_annulation,nom_annulation);
-
-	saisie_specialite(specialite_annulation);
+		Begin
+			Put("Les demandes d'annulation ne peuvent être annulées que pour les semaines à venir, la semaine en cours (0) est figée.");
+			new_line;
+			saisie_semaine(semaine);
+			saisie_jour(jour);
+			put_line("Saisir l'identité du cuisinier");
+			saisie_cook(prenom_annulation,nom_annulation);
+			saisie_specialite(specialite_annulation);
 	
-	For j in 1..NbC loop
-		if Planning(semaine)(jour,j).nom_client = nom_annulation and Planning(semaine)(jour,j).prenom_client = prenom_annulation and Planning(semaine)(jour,j).existe then
-			Planning(semaine)(jour,j).existe:=false;
-			Put("Prestation annulée");
-			new_line;
-			new_line;
-		end if;
-	end loop;
-end annulation;
+			For j in 1..NbC loop
+				if Planning(semaine)(jour,j).nom_client = nom_annulation and Planning(semaine)(jour,j).prenom_client = prenom_annulation and Planning(semaine)(jour,j).existe then
+					Planning(semaine)(jour,j).existe:=false;
+					Put("Prestation annulée");
+					new_line;
+				end if;
+			end loop;
+	end annulation;
 
 ---------------------------------------------------
 
@@ -292,35 +302,39 @@ end annulation;
 			for i in Tableau_cuisinier'range loop
 				if date_du_jour in mardi..samedi then
 					if Planning(0)(date_du_jour,i).existe then
-						--saisie_note(Planning, date_du_jour, i);
+						saisie_note(Planning, date_du_jour, i);
 						actualisation_cuisinier(Tableau_Cuisinier, Planning, date_du_jour, i);				
 --					archivage_prestation();
 					end if;
 				end if;
 			end loop;
 			actualisation_date_du_jour(Tableau_Cuisinier, Planning, date_du_jour);
-			
-			
-			
 	End passage_au_lendemain;
 	
 ---------------------------------------------------
 		
 	Procedure saisie_note(Planning : IN OUT T_planning; date_du_jour : IN T_semaine; cuisto : IN integer) is
-		note:notation;
+		note:float;
 		Begin
 			put("Saisir la note à attribuer par");
 			put(Planning(0)(date_du_jour,cuisto).nom_client);
 			put(Planning(0)(date_du_jour,cuisto).prenom_client);
-			get(note);skip_line;
-			----saisie securisée
-			Planning(0)(date_du_jour,cuisto).note:=note;
+			loop
+				Begin
+					get(note);skip_line;
+					Planning(0)(date_du_jour,cuisto).note:=note;
+					exit when note in 0.0..6.0;
+					exception
+						when data_error => skip_line;
+						put_line("Erreur dans la saisie de la note, ressaisissez..");
+				end;
+			end loop;	
 	End saisie_note;
 	
 ---------------------------------------------------
 
 	Procedure actualisation_cuisinier(Tableau_Cuisinier: IN OUT T_club; Planning : IN T_planning; date_du_jour : IN T_semaine; cuisto : IN integer) is
-	existe : boolean := false;
+		existe : boolean := false;
 		Begin
 			for i in Tableau_cuisinier'range loop
 				if Planning(0)(date_du_jour,cuisto).existe and Tableau_Cuisinier(cuisto).existe=true then

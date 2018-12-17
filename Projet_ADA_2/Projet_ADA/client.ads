@@ -5,6 +5,10 @@ use types;
 Package client is
 
 	Procedure saisie_prestation (Planning: IN OUT T_planning;Tableau_cuisinier: IN T_club);
+	
+	Procedure saisie_semaine (semaine : OUT integer);
+	
+	Procedure saisie_jour(jour : OUT T_semaine);
 
 	Procedure annulation (Planning: IN OUT T_Planning);
 
