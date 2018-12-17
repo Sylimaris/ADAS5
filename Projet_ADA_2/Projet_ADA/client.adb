@@ -15,8 +15,6 @@ Procedure saisie_prestation (Planning : IN OUT T_planning; Tableau_cuisinier: IN
 	cook_specialite:T_specialite;
 	jour:T_semaine;
 	semaine:integer range 1..2;
-	k:integer;
-	sjour:string(1..9);
 	ajout,travaille,dispo,test_cuisto_spe:boolean:=false;
 	compteurCook:integer:=0;
 	choix:character;	
@@ -140,6 +138,7 @@ End saisie_prestation;
 -----------------------------------------------------
 
 	Procedure saisie_semaine(semaine : OUT integer) is
+		
 		Begin
 			put_line("Saisir la semaine visée (1 = semaine prochaine | 2 = dans deux semaines): ");
 			loop
@@ -156,6 +155,9 @@ End saisie_prestation;
 -----------------------------------------------------	
 	
 	Procedure saisie_jour(jour : OUT T_semaine) is
+		k:integer;
+		sjour:string(1..9);
+		
 		Begin
 			put_line("Saisir le jour voulu: mardi, mercredi, jeudi, vendredi ou samedi");
 			loop
@@ -270,10 +272,8 @@ end affichage_planning;
 ---------------------------------------------------
 
 	Procedure annulation (Planning: IN OUT T_Planning) is
-		sjour:string(1..9);
 		prenom_annulation,nom_annulation:nomination;
 		specialite_annulation:T_specialite;
-		k:integer;
 		semaine:integer;
 		jour:T_semaine;
 
