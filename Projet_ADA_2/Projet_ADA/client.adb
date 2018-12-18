@@ -1,5 +1,5 @@
-with ada.text_io, ada.integer_text_io,ada.Float_Text_IO,ada.characters.handling,types,cuisinier;
-use ada.text_io, ada.integer_text_io,ada.Float_Text_IO,ada.characters.handling,types,cuisinier;
+with ada.text_io, ada.integer_text_io,ada.Float_Text_IO,ada.characters.handling,types,cuisinier,archive;
+use ada.text_io, ada.integer_text_io,ada.Float_Text_IO,ada.characters.handling,types,cuisinier,archive;
 
 Package body client is
 
@@ -253,7 +253,7 @@ begin
 		put(i, width=>0);new_line;
 		for j in mardi..samedi loop
 			put("Jour : ");
-			put(T_semaine'image(j));new_line;
+			put(T_semaine'image(j));new_line;new_line;
 			for k in 1..NbC loop
 				if Planning(i)(j,k).existe then
 					put("Nom Client: ");put(Planning(i)(j,k).nom_client); new_line;
@@ -276,7 +276,7 @@ end affichage_planning;
 		specialite_annulation:T_specialite;
 		semaine:integer;
 		jour:T_semaine;
-
+		bool:boolean:=false;
 		Begin
 			Put("Les demandes d'annulation ne peuvent être annulées que pour les semaines à venir, la semaine en cours (0) est figée.");
 			new_line;
@@ -291,8 +291,14 @@ end affichage_planning;
 					Planning(semaine)(jour,j).existe:=false;
 					Put("Prestation annulée");
 					new_line;
+					bool:=true;
 				end if;
 			end loop;
+			if bool=false then
+				new_line;
+				put("Pas de prestation à annuler de ce type là, veuillez vérifier les informations");
+				new_line;
+			end if;
 	end annulation;
 
 ---------------------------------------------------
@@ -304,7 +310,7 @@ end affichage_planning;
 					if Planning(0)(date_du_jour,i).existe then
 						saisie_note(Planning, date_du_jour, i);
 						actualisation_cuisinier(Tableau_Cuisinier, Planning, date_du_jour, i);				
---					archivage_prestation();
+						archivage(Planning(0)(date_du_jour,i));
 					end if;
 				end if;
 			end loop;
@@ -316,9 +322,11 @@ end affichage_planning;
 	Procedure saisie_note(Planning : IN OUT T_planning; date_du_jour : IN T_semaine; cuisto : IN integer) is
 		note:float;
 		Begin
-			put("Saisir la note à attribuer par");
-			put(Planning(0)(date_du_jour,cuisto).nom_client);
+			put("Saisir la note attribuée par ");
 			put(Planning(0)(date_du_jour,cuisto).prenom_client);
+			put(Planning(0)(date_du_jour,cuisto).nom_client);
+			new_line;
+			put ("Note de 0.0 à 6.0:");
 			loop
 				Begin
 					get(note);skip_line;
@@ -326,6 +334,7 @@ end affichage_planning;
 					exit when note in 0.0..6.0;
 					exception
 						when data_error => skip_line;
+						when constraint_error => skip_line;
 						put_line("Erreur dans la saisie de la note, ressaisissez..");
 				end;
 			end loop;	

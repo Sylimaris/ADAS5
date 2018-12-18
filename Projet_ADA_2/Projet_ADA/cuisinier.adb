@@ -11,7 +11,7 @@ Package body cuisinier is
 		put_line("Saisir le nom: ");
 		loop
 			Begin
-	    		get_line(cook_prenom,k);
+	    		get_line(cook_nom,k);
 				exit;
 				exception
 				when constraint_error => put_line("Erreur de la saisie du nom, ressaisissez..");

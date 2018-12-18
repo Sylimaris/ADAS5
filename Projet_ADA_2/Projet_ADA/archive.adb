@@ -30,7 +30,7 @@ end Archivage;
 procedure Lecture_client is
 	Prestation : T_prestation;
 	File:P_Fichier_archive.file_type;
-	nom_client,prenom_client:nomination;
+	nom_client,prenom_client:nomination:=('*',others =>' ');
 	compteur:integer:=0;
 
 begin
@@ -40,6 +40,7 @@ begin
 
 new_line;
 Put("Nom et prénom du client à chercher:");
+new_line;
 saisie_cook(prenom_client,nom_client);
 
 while not End_Of_File(File) loop
@@ -55,8 +56,9 @@ while not End_Of_File(File) loop
 			put("Note attribuée: ");put(Prestation.note,aft=>0,exp=>0);new_line;new_line;
 		end if;
 end loop;
-
+close(File);
 if compteur=0 then
+new_line;
 put("Client non trouvé : CAUSES POSSIBLES -> Faute orthographe / Faute majuscule-minuscule / Client pas encore archivé");
 new_line;
 end if;
@@ -73,7 +75,7 @@ end Lecture_client;
 procedure Lecture_cuisinier is
 	Prestation : T_prestation;
 	File:P_Fichier_archive.file_type;
-	nom_cuisinier,prenom_cuisinier:nomination;
+	nom_cuisinier,prenom_cuisinier:nomination:=('*',others =>' ');
 	compteur:integer:=0;
 	total:integer:=0;
 
@@ -84,6 +86,7 @@ begin
 
 new_line;
 Put("Nom et prénom du cuisinier à chercher:");
+new_line;
 saisie_cook(prenom_cuisinier,nom_cuisinier);
 
 while not End_Of_File(File) loop
@@ -100,8 +103,9 @@ while not End_Of_File(File) loop
 			put("Note attribuée: ");put(Prestation.note,aft=>0,exp=>0);new_line;new_line;
 		end if;
 end loop;
-
+close(File);
 if compteur=0 then
+	new_line;
 	put("Cuisinier non trouvé : CAUSES POSSIBLES -> Faute orthographe / Faute majuscule-minuscule / Client pas encore archivé");
 	new_line;
 else
@@ -127,39 +131,47 @@ procedure Specialite_info is
 
 
 begin
+
+for i in cuisine_francaise_traditionnelle..buffet loop
+specialite:=i;
+compteur:=0;
+nb_repas:=0;
+note_moyenne:=0.0;
+total_note:=0.0;
 	begin
 		open(File,in_file,"Archive.txt");
 	end;
 
-saisie_specialite(specialite);
+	while not End_Of_File(File) loop
+		Read(File,Prestation);
+		if Prestation.specialite=specialite then
+			compteur:=compteur+1;
+			nb_repas:=nb_repas+Prestation.nb_convives;
+			total_note:=total_note+Prestation.note;
+		end if;
+	end loop;
+	close(File);
 
-while not End_Of_File(File) loop
-	Read(File,Prestation);
-	if Prestation.specialite=specialite then
-		compteur:=compteur+1;
-		nb_repas:=nb_repas+Prestation.nb_convives;
-		total_note:=total_note+Prestation.note;
-	end if;
+	new_line;
+	put("------- ");
+	Put("Spécialite :");Put(T_specialite'image(specialite));
+	new_line;
+	new_line;
+
+	put("Nombre de prestations réalisées: ");
+	put(compteur,width=>0);
+	new_line;
+
+	put("Nombre total de repas servis: ");
+	put(nb_repas,width=>0);
+	new_line;
+
+	put("Note moyenne: ");
+	note_moyenne:=total_note/float(compteur);
+	put(note_moyenne,aft=>0,exp=>0);
+	new_line;
+	new_line;
 end loop;
-
-Put("Spécialite :");Put(T_specialite'image(specialite));
-new_line;
-new_line;
-
-put("Nombre de prestations réalisées: ");
-put(compteur);
-new_line;
-
-put("Nombre total de repas servis: ");
-put(nb_repas);
-new_line;
-
-put("Note moyenne: ");
-note_moyenne:=total_note/float(compteur);
-put(note_moyenne,aft=>0,exp=>0);
-new_line;
-new_line;
-
 
 end Specialite_info;
 
@@ -171,10 +183,10 @@ begin
 		put_line("    ║  ├┤ │   │ │ │├┬┘├┤    ││├┤   ├┤ ││  ├─┤│├┤ ├┬┘");
 		put_line("    ╩═╝└─┘└─┘ ┴ └─┘┴└─└─┘  ─┴┘└─┘  └  ┴└─┘┴ ┴┴└─┘┴└─");
 		new_line;
-		Put_line("1 => Anciennes prestations d'un cuisinier précis");
-		Put_line("2 => Anciennes prestations pour un client précis");
+		Put_line("1 => Anciennes prestations d'un client précis");
+		Put_line("2 => Anciennes prestations pour un cuisinier précis");
 		Put_line("3 => Informations pour chaques spécialités");
-		Put_line("4 => Sortir du menu Lecture De Fichier");
+		Put_line("4 => Sortir du sous-menu lecture de fichier");
 		Put(" Choix :");
 		get(option);skip_line;
 		exit when option='1' or option='2' or option='3' or option='4';
