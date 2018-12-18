@@ -26,7 +26,6 @@ Package body cuisinier is
 				when constraint_error => put_line("Erreur de la saisie du prenom, ressaisissez..");
 			end;
 		end loop;
-		--Les vérifs sont à faire dans la procédure utilisant cette procédure, avec le tableau des T_cuisiniers.
 	end saisie_cook;
 
 ---------------------------------------------------------
@@ -107,26 +106,6 @@ Package body cuisinier is
 			end if;
 		end loop;
 	end affichage_club;		
-	
---------------------------------------------------------
-	
-	Procedure affichage_chiffre_affaire (Tableau_Cuisinier: IN T_club; cook_nom, cook_prenom: IN nomination) is
-		Begin
-			for i in Tableau_Cuisinier'range loop
-				if Tableau_Cuisinier(i).existe=true then
-					if cook_nom=Tableau_Cuisinier(i).nom and cook_prenom=Tableau_Cuisinier(i).prenom then
-						put("Le chiffre d'affaire de ");
-						put(cook_nom);put(" ");
-						put(cook_prenom);
-						put(" est de :");
-						put(Tableau_Cuisinier(i).chiffre_affaire);
-						put_line("€");
-						exit;
-					end if;
-				end if;
-			end loop;
-			put_line("Ce cuisinier n'existe pas, il n'a donc pas de chiffre d'affaire.");
-	End affichage_chiffre_affaire;
 	
 --------------------------------------------------------
 

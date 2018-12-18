@@ -12,7 +12,7 @@ procedure Archivage (Prestation: IN T_Prestation) is
 
 	begin
 		begin
-		open(File,append_file,"Archive.txt");
+		open(File,append_file,"Archive.txt"); 
 		exception
 			when others=>create(File,name=>"Archive.sortie");
 		end;

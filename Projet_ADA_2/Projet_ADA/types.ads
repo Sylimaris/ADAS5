@@ -3,7 +3,7 @@ package types is
 	NbC :constant natural :=8; 			-- NB cuisiniers 
 	taille_demande : constant natural := 15*NbC; 	-- NB cuisiniers * nb possibilités
 
-	Subtype notation is float range 1.0..6.0;
+	Subtype notation is float range 0.0..6.0;
 	Subtype intSemaine is integer range 0..2;
 	Subtype nomination is string (1..13);
 

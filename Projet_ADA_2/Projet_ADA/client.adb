@@ -109,8 +109,6 @@ Procedure saisie_prestation (Planning : IN OUT T_planning; Tableau_cuisinier: IN
 								Planning(semaine)(jour,j).prenom_client:=prenom_client;
 								Planning(semaine)(jour,j).nb_convives:=nb_convives;
 								Planning(semaine)(jour,j).specialite:=cook_specialite;
-						--Planning(h)(i,j).jour --PAS SUR
-						--Planning(h)(i,j).note --Non définie pour le moment lors de la création
 								Planning(semaine)(jour,j).nom_cuisinier:=nom_cook;
 								Planning(semaine)(jour,j).prenom_cuisinier:=prenom_cook;
 								Planning(semaine)(jour,j).existe:=true;
@@ -147,8 +145,8 @@ End saisie_prestation;
 					exit when semaine=1 or semaine=2;
 					exception
 						when data_error => skip_line;
-						put_line("Erreur dans la saisie de la semaine, ressaisissez..");
 					end;
+				put_line("Erreur dans la saisie de la semaine, ressaisissez..");
 			end loop;
 	End saisie_semaine;
 	
@@ -166,8 +164,9 @@ End saisie_prestation;
 					jour:=T_semaine'value(sjour(1..k));
 					exit when jour in mardi..samedi;
 					exception
-						when constraint_error => put_line("Erreur de la saisie du jour, ressaisissez..");
+						when constraint_error => Null;
 				end;
+				put_line("Erreur de la saisie du jour, ressaisissez..");
 			end loop;
 	end saisie_jour;
 
@@ -237,7 +236,8 @@ End saisie_prestation;
 					end if;
 				end loop;
 			else
-				put("Notre equipe n'est pas en mesure d'assurer la réservation et doit donc l'annuler -- Récap réservation annulée:");
+				put_line("Notre equipe n'est pas en mesure d'assurer la réservation et doit donc l'annuler");
+				put("Récap réservation annulée:");
 				put(nom_client);put(" ");put(prenom_client);put(" Semaine:");put(semaine);put(" ");put(T_semaine'image(jour));
 				new_line;
 			end if;
@@ -272,8 +272,8 @@ end affichage_planning;
 ---------------------------------------------------
 
 	Procedure annulation (Planning: IN OUT T_Planning) is
-		prenom_annulation,nom_annulation:nomination;
-		specialite_annulation:T_specialite;
+		prenom_annulation,nom_annulation:nomination:=('*',others=>' ');
+		--specialite_annulation:T_specialite;
 		semaine:integer;
 		jour:T_semaine;
 		bool:boolean:=false;
@@ -282,9 +282,9 @@ end affichage_planning;
 			new_line;
 			saisie_semaine(semaine);
 			saisie_jour(jour);
-			put_line("Saisir l'identité du cuisinier");
+			put_line("Saisir l'identité du client");
 			saisie_cook(prenom_annulation,nom_annulation);
-			saisie_specialite(specialite_annulation);
+			--saisie_specialite(specialite_annulation); pas utilisé pour le moment
 	
 			For j in 1..NbC loop
 				if Planning(semaine)(jour,j).nom_client = nom_annulation and Planning(semaine)(jour,j).prenom_client = prenom_annulation and Planning(semaine)(jour,j).existe then
@@ -326,7 +326,11 @@ end affichage_planning;
 			put(Planning(0)(date_du_jour,cuisto).prenom_client);
 			put(Planning(0)(date_du_jour,cuisto).nom_client);
 			new_line;
-			put ("Note de 0.0 à 6.0:");
+			put("pour :");
+			put(Planning(0)(date_du_jour,cuisto).prenom_cuisinier); 
+			put(Planning(0)(date_du_jour,cuisto).nom_cuisinier); 
+			new_line;
+			put ("Note de 0 à 6.0:");
 			loop
 				Begin
 					get(note);skip_line;
@@ -334,9 +338,8 @@ end affichage_planning;
 					exit when note in 0.0..6.0;
 					exception
 						when data_error => skip_line;
-						when constraint_error => skip_line;
-						put_line("Erreur dans la saisie de la note, ressaisissez..");
 				end;
+				put_line("Erreur dans la saisie de la note, ressaisissez..");
 			end loop;	
 	End saisie_note;
 	

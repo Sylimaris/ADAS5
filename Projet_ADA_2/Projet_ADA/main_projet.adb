@@ -17,7 +17,7 @@ Procedure Menu(option:out character) is
 			put_line("    ╩ ╩└─┘┘└┘└─┘");
 			
 			new_line;
-			Put_line("0 => Initialisation selon les users stories /!\ dangereux remet tout au départ");
+			Put_line("0 => Initialisation selon les users stories /!\");
 			new_line;
 			Put_line("1 => Enregistrer un cuisinier");
 			Put_line("2 => Visualiser le club de cuisiniers");
