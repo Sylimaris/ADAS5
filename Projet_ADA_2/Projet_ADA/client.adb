@@ -420,7 +420,28 @@ end affichage_planning;
 			else
 				date_du_jour:=T_semaine'succ(date_du_jour);
 			end if;
-		
+
+			if date_du_jour in mardi..samedi then
+				put("Prestation(s) du jour:");
+				for i in 1..NbC loop
+					if Planning(0)(date_du_jour,i).existe then
+						put(Planning(0)(date_du_jour,i).prenom_cuisinier);
+						put(Planning(0)(date_du_jour,i).nom_cuisinier);
+						put("pour : ");		
+						put(Planning(0)(date_du_jour,i).prenom_client);
+						put(Planning(0)(date_du_jour,i).nom_client);
+						put(Planning(0)(date_du_jour,i).nb_convives);
+						put(" personnes.");
+						new_line;
+						new_line;
+					end if;
+				end loop;
+				new_line;
+				new_line;
+			end if;
+
+
+
 	End actualisation_date_du_jour;
 	
 end client;
